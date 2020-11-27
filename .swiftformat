@@ -1,0 +1,35 @@
+# indent
+--indent 2
+--ifdef no-indent
+
+--self remove # redundantSelf
+--importgrouping testable-bottom # sortedImports
+
+# wrap
+--maxwidth 80
+
+# trailingCommas
+--commas inline
+--commas always # trailingCommas
+
+# trailinc closure
+--trailingclosures
+
+# wrapArguments
+--wraparguments before-first
+--wrapcollections before-first
+--wrapparameters before-first
+--typeattributes prev-line # wrapAttributes
+--funcattributes prev-line # wrapAttributes
+
+--organizetypes class,struct,enum,extension # organizeDeclarations
+--extensionacl on-declarations # extensionAccessControl
+
+# elseOnSameLine
+--guardelse same-line
+
+# rules
+--rules anyObjectProtocol,redundantParens,redundantReturn,redundantSelf,sortedImports,strongifiedSelf,trailingCommas,trailingSpace,wrapArguments,wrapMultilineStatementBraces,indent,wrapAttributes,organizeDeclarations,markTypes,extensionAccessControl
+
+#exclude
+

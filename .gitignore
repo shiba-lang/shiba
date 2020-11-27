@@ -18,7 +18,10 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
+*.xcodeproj/
 
 # SPM
 .build/
+
+./Sources
 

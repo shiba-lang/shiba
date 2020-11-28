@@ -137,7 +137,7 @@ final class Lexer {
 				advanceWhile { _ in
 					return currentSubstring(2) != "*/"
 				}
-				// TODO: - Test here, I think it will produce error
+				advance()
 				advance()
 				return try advanceToNextToken()
 			}

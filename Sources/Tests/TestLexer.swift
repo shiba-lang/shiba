@@ -8,20 +8,20 @@
 import Foundation
 
 func testLexer() {
-	let input = """
-	// just simple thing
-	/*
-	hmmmm it work?
-	this is test for multi line comment
-	*/
-	fn test() -> String {
-		return "test something"
-	}
-	"""
+  let input = """
+  // just simple thing
+  /*
+  hmmmm it work?
+  this is test for multi line comment
+  */
+  fn test() -> String {
+  	return "test something"
+  }
+  """
 
-	let tokens = try! Lexer(input: input).lex()
-	tokens.forEach { tok in
-		print("\(tok) \n")
-	}
+  let tokens = try! Lexer(input: input).lex()
+  tokens.forEach { tok in
+    print("\(tok) \n")
+  }
 
 }

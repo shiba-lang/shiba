@@ -8,29 +8,29 @@
 import Foundation
 
 extension UnicodeScalar {
-	var isNumeric: Bool {
-		return isnumber(Int32(self.value)) != 0
-	}
+  static let operatorChars: Set<UnicodeScalar> = Set("+-*/%=~<>^|&!".unicodeScalars)
 
-	var isSpace: Bool {
-		return isspace(Int32(self.value)) != 0 && self != "\n"
-	}
+  var isNumeric: Bool {
+    isnumber(Int32(value)) != 0
+  }
 
-	var isLineSeparator: Bool {
-		return self == "\n" || self == ";"
-	}
+  var isSpace: Bool {
+    isspace(Int32(value)) != 0 && self != "\n"
+  }
 
-	var isIdentifier: Bool {
-		return isalnum(Int32(self.value)) != 0 || self == "_"
-	}
+  var isLineSeparator: Bool {
+    self == "\n" || self == ";"
+  }
 
-	static let operatorChars: Set<UnicodeScalar> = Set("+-*/%=~<>^|&!".unicodeScalars)
+  var isIdentifier: Bool {
+    isalnum(Int32(value)) != 0 || self == "_"
+  }
 
-	var isOperator: Bool {
-		return UnicodeScalar.operatorChars.contains(self)
-	}
+  var isOperator: Bool {
+    UnicodeScalar.operatorChars.contains(self)
+  }
 
-	var isHexadecimal: Bool {
-		return ishexnumber(Int32(self.value)) != 0
-	}
+  var isHexadecimal: Bool {
+    ishexnumber(Int32(value)) != 0
+  }
 }

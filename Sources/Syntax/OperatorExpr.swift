@@ -43,6 +43,6 @@ enum BuiltinOperator: String, CustomStringConvertible {
   // MARK: Internal
 
   var description: String {
-    return rawValue
+    rawValue
   }
 }

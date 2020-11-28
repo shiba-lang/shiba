@@ -30,7 +30,7 @@ enum DeclAccessKind: String, CustomStringConvertible {
   // MARK: Internal
 
   var description: String {
-    return rawValue
+    rawValue
   }
 
   func isValid(on kind: DeclContextKind) -> Bool {
@@ -63,7 +63,7 @@ struct SourceLocation: CustomStringConvertible, Equatable {
   var charOffset: Int = 0
 
   var description: String {
-    return "<line: \(line), column: \(column)"
+    "<line: \(line), column: \(column)"
   }
 
   static func ==(lhs: Self, rhs: Self) -> Bool {
@@ -122,11 +122,11 @@ struct Identifier: CustomStringConvertible, Equatable, Hashable, ExpressibleBySt
   let range: SourceRange?
 
   var description: String {
-    return name
+    name
   }
 
   static func ==(lhs: Identifier, rhs: Identifier) -> Bool {
-    return lhs.name == rhs.name
+    lhs.name == rhs.name
   }
 
   func hash(into hasher: inout Hasher) {
@@ -151,19 +151,19 @@ class Expr: Equatable, Hashable {
   let sourceRange: SourceRange?
 
   static func ==(lhs: Expr, rhs: Expr) -> Bool {
-    return lhs.equals(rhs)
+    lhs.equals(rhs)
   }
 
   func startLoc() -> SourceLocation? {
-    return sourceRange?.start
+    sourceRange?.start
   }
 
   func endLoc() -> SourceLocation? {
-    return sourceRange?.end
+    sourceRange?.end
   }
 
   func equals(_ rhs: Expr) -> Bool {
-    return false
+    false
   }
 
   func hash(into hasher: inout Hasher) {
@@ -173,15 +173,23 @@ class Expr: Equatable, Hashable {
 
 }
 
-final class BindingExpr: Expr {
-	let name: Identifier
-	init(name: Identifier, sourceRange: SourceRange? = nil) {
-		self.name = name
-		super.init(sourceRange: sourceRange)
-	}
+// MARK: - BindingExpr
 
-	override func equals(_ rhs: Expr) -> Bool {
-		guard let rhs = rhs as? BindingExpr else { return false }
-		return name == rhs.name
-	}
+final class BindingExpr: Expr {
+
+  // MARK: Lifecycle
+
+  init(name: Identifier, sourceRange: SourceRange? = nil) {
+    self.name = name
+    super.init(sourceRange: sourceRange)
+  }
+
+  // MARK: Internal
+
+  let name: Identifier
+
+  override func equals(_ rhs: Expr) -> Bool {
+    guard let rhs = rhs as? BindingExpr else { return false }
+    return name == rhs.name
+  }
 }

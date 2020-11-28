@@ -8,26 +8,26 @@
 import Foundation
 
 struct Token {
-	let kind: TokenKind
-	let range: SourceRange
+  let kind: TokenKind
+  let range: SourceRange
 
-	var isKeyword: Bool {
-		return kind.isKeyword
-	}
+  var isKeyword: Bool {
+    kind.isKeyword
+  }
 
-	var isLiteral: Bool {
-		return kind.isLiteral
-	}
+  var isLiteral: Bool {
+    kind.isLiteral
+  }
 
-	var isLineSeparator: Bool {
-		return kind.isLineSeparator
-	}
+  var isLineSeparator: Bool {
+    kind.isLineSeparator
+  }
 
-	var isString: Bool {
-		return kind.isString
-	}
+  var isString: Bool {
+    kind.isString
+  }
 
-	var isEOF: Bool {
-		return kind.isEOF
-	}
+  var isEOF: Bool {
+    kind.isEOF
+  }
 }

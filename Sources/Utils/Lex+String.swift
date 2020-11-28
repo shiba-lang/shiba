@@ -43,23 +43,23 @@ extension String {
     return str
   }
 
-	func removing(_ string: String) -> String {
-		return replacingOccurrences(of: string, with: "")
-	}
+  func removing(_ string: String) -> String {
+    replacingOccurrences(of: string, with: "")
+  }
 
-	func asNumber() -> Int? {
-		let prefixMap = ["0x": 16, "0b": 2, "0o": 8]
-		if self.count <= 2 {
-			return Int(self, radix: 10)
-		}
-		let prefixIndex = self.index(startIndex, offsetBy: 2)
-		let prefix = String(self[..<prefixIndex])
-		guard let radix = prefixMap[prefix] else {
-			return Int(removing("_"), radix: 10)
-		}
+  func asNumber() -> Int? {
+    let prefixMap = ["0x": 16, "0b": 2, "0o": 8]
+    if count <= 2 {
+      return Int(self, radix: 10)
+    }
+    let prefixIndex = index(startIndex, offsetBy: 2)
+    let prefix = String(self[..<prefixIndex])
+    guard let radix = prefixMap[prefix] else {
+      return Int(removing("_"), radix: 10)
+    }
 
-		let suffixIndex = self.index(startIndex, offsetBy: 2)
-		let suffix = String(removing("_")[suffixIndex...])
-		return Int(suffix, radix: radix)
-	}
+    let suffixIndex = index(startIndex, offsetBy: 2)
+    let suffix = String(removing("_")[suffixIndex...])
+    return Int(suffix, radix: radix)
+  }
 }

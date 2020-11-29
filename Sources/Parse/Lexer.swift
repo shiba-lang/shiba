@@ -54,8 +54,7 @@ final class Lexer {
         }
         tokens.append(tok)
       } catch let err {
-        // TODO: - Better error handling
-        print("failed to lex: \(err.localizedDescription) at \(sourceLocation)")
+        throw Diagnostic.error(err, loc: sourceLocation)
       }
     }
     return tokens

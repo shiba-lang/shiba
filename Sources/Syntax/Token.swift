@@ -11,6 +11,10 @@ struct Token {
   let kind: TokenKind
   let range: SourceRange
 
+  var length: Int {
+    range.end.charOffset - range.start.charOffset
+  }
+
   var isKeyword: Bool {
     kind.isKeyword
   }

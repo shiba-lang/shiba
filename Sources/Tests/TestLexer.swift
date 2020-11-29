@@ -21,7 +21,8 @@ func testLexer() {
 
   let tokens = try! Lexer(input: input).lex()
   tokens.forEach { tok in
-    print("\(tok) \n")
+
+    print("tok: \(tok), length: \(tok.length)\n")
   }
 
 }

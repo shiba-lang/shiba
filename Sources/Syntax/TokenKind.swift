@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - TokenKind
+
 enum TokenKind {
   case number(value: Int, raw: String)
   case identifier(value: String)
@@ -225,5 +227,44 @@ enum TokenKind {
   var isString: Bool {
     if case .stringLiteral = self { return true }
     return false
+  }
+}
+
+// MARK: Equatable
+
+extension TokenKind: Equatable {
+  static func ==(lhs: TokenKind, rhs: TokenKind) -> Bool {
+    switch (lhs, rhs) {
+    case (.semicolon, .semicolon), (.newline, .newline), (.leftParen, .leftParen),
+         (.rightParen, .rightParen), (.leftBrace, .leftBrace),
+         (.rightBrace, .rightBrace), (.leftSquare, .leftSquare),
+         (.rightSquare, .rightSquare), (.comma, .comma), (.colon, .colon),
+         (.arrow, .arrow), (.ellipsis, .ellipsis), (.dot, .dot),
+         (.questionMark, .questionMark), (.fn, .fn), (.Init, .Init),
+         (.deinit, .deinit), (.extension, .extension), (.sizeOf, .sizeOf),
+         (.typedef, .typedef), (.while, .while), (.for, .for), (.nil, .nil),
+         (.if, .if), (.else, .else), (.in, .in), (.let, .let), (.mut, .mut),
+         (.enum, .enum), (.return, .leftParen), (.switch, .switch),
+         (.case, .case), (.default, .default), (.break, .break),
+         (.continue, .continue), (.true, .true), (.false, .false), (.eof, .eof),
+         (.underscore, .underscore), (.poundFunction, .poundFunction),
+         (.poundFile, .poundFile), (.poundWarning, .poundWarning),
+         (.poundError, .poundError), (.as, .as):
+      return true
+    case (.number(let lhsValue, let lhsRaw), .number(let rhsValue, let rhsRaw)):
+      return lhsValue == rhsValue && lhsRaw == rhsRaw
+    case (.identifier(let lhsValue), .identifier(let rhsValue)):
+      return lhsValue == rhsValue
+    case (.char(let lhs), .char(let rhs)):
+      return lhs == rhs
+    case (.unknown(let lhs), .unknown(let rhs)):
+      return lhs == rhs
+    case (.operator(let lhs), .operator(let rhs)):
+      return lhs == rhs
+    case (.stringLiteral(let lhs), .stringLiteral(let rhs)):
+      return lhs == rhs
+    default:
+      return false
+    }
   }
 }

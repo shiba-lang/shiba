@@ -39,6 +39,7 @@ extension String {
       } else {
         str.append(char)
       }
+      nextCharIsEscaped = false
     }
     return str
   }

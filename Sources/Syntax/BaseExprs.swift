@@ -55,18 +55,29 @@ enum DeclAccessKind: String, CustomStringConvertible {
 
 // MARK: - SourceLocation
 
-struct SourceLocation: CustomStringConvertible, Equatable {
+struct SourceLocation: CustomStringConvertible, Comparable {
+
+  // MARK: Lifecycle
+
+  init(line: Int, column: Int, charOffset: Int = 0) {
+    self.line = line
+    self.column = column
+    self.charOffset = charOffset
+  }
+
+  // MARK: Internal
+
   static let zero = SourceLocation(line: 0, column: 0)
 
   var line: Int
   var column: Int
-  var charOffset: Int = 0
+  var charOffset: Int
 
   var description: String {
-    "<line: \(line), column: \(column)"
+    "<line: \(line), column: \(column)>"
   }
 
-  static func ==(lhs: Self, rhs: Self) -> Bool {
+  static func ==(lhs: SourceLocation, rhs: SourceLocation) -> Bool {
     if lhs.charOffset == rhs.charOffset {
       return true
     }
@@ -79,6 +90,7 @@ struct SourceLocation: CustomStringConvertible, Equatable {
     return lhs.column < rhs.column
   }
 }
+
 
 // MARK: - SourceRange
 
@@ -129,12 +141,15 @@ struct Identifier: CustomStringConvertible, Equatable, Hashable, ExpressibleBySt
     lhs.name == rhs.name
   }
 
+
   func hash(into hasher: inout Hasher) {
     hasher.combine(name)
     hasher.combine(0x23423378)
   }
 
 }
+
+
 
 // MARK: - Expr
 

@@ -4,7 +4,7 @@ Shiba is a compiled, simple, type-safe programming language. Written in Swift
 ## TODO
 
 ### Main
-- [x] Lexer
+- [x] Lexical analysis
 - [ ] Parser
 - [ ] AST
 - [ ] Sema

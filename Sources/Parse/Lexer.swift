@@ -110,18 +110,6 @@ final class Lexer {
       return Token(kind: .eof, range: range(start: sourceLocation))
     }
 
-    let startLoc = range(start: sourceLocation)
-
-    if currentChar == "[" {
-      advance()
-      return Token(kind: .leftSquare, range: startLoc)
-    }
-
-    if currentChar == "]" {
-      advance()
-      return Token(kind: .rightSquare, range: startLoc)
-    }
-
     if currentChar == "\n" {
       defer {
         advanceWhile { $0.isSpace || $0.isLineSeparator }
@@ -155,9 +143,22 @@ final class Lexer {
       }
     }
 
+    /// Fix issue #2
+    let startLocation = sourceLocation
+
+    if currentChar == "[" {
+      advance()
+      return Token(kind: .leftSquare, range: range(start: startLocation))
+    }
+
+    if currentChar == "]" {
+      advance()
+      return Token(kind: .rightSquare, range: range(start: startLocation))
+    }
+
     if currentSubstring(3) == "..." {
       advance(3)
-      return Token(kind: .ellipsis, range: startLoc)
+      return Token(kind: .ellipsis, range: range(start: startLocation))
     }
 
     if currentChar == "'" {
@@ -168,7 +169,7 @@ final class Lexer {
         throw LexError.invalidCharacterLiteral(literal: "\(value)")
       }
       advance()
-      return Token(kind: .char(value: value), range: startLoc)
+      return Token(kind: .char(value: value), range: range(start: startLocation))
     }
 
     // \n, \t
@@ -179,30 +180,42 @@ final class Lexer {
         str.append(String(try readCharacter()))
       }
       advance()
-      return Token(kind: .stringLiteral(value: str), range: startLoc)
+      return Token(
+        kind: .stringLiteral(value: str),
+        range: range(start: startLocation)
+      )
     }
 
     if currentChar.isIdentifier {
       let id = collectWhile { $0.isIdentifier }
       if let numVal = id.asNumber() {
-        return Token(kind: .number(value: numVal, raw: id), range: startLoc)
+        return Token(
+          kind: .number(value: numVal, raw: id),
+          range: range(start: startLocation)
+        )
       } else {
-        return Token(kind: TokenKind(identifier: id), range: startLoc)
+        return Token(
+          kind: TokenKind(identifier: id),
+          range: range(start: startLocation)
+        )
       }
     }
 
     if currentChar.isOperator {
       let str = collectWhile { $0.isOperator }
       if let op = BuiltinOperator(rawValue: str) {
-        return Token(kind: .operator(op: op), range: startLoc)
+        return Token(kind: .operator(op: op), range: range(start: startLocation))
       } else {
-        return Token(kind: TokenKind(op: str), range: startLoc)
+        return Token(
+          kind: TokenKind(op: str),
+          range: range(start: startLocation)
+        )
       }
     }
 
     advance()
     let kind = TokenKind(op: String(currentChar))
-    return Token(kind: kind, range: startLoc)
+    return Token(kind: kind, range: range(start: startLocation))
   }
 
   private func advanceIf(
@@ -247,6 +260,9 @@ final class Lexer {
       case "r":
         advance()
         return "\r" as UnicodeScalar
+      case "\""?:
+        advance()
+        return "\"" as UnicodeScalar
       default:
         throw LexError.invalidEscape(escapeChar: currentChar!)
       }

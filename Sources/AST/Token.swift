@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Token {
+public struct Token {
   let kind: TokenKind
   let range: SourceRange
 

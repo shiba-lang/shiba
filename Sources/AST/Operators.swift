@@ -1,13 +1,13 @@
 //
-//  OperatorExpr.swift
+//  Operators.swift
 //  Shiba
 //
-//  Created by Khoa Le on 27/11/2020.
+//  Created by Khoa Le on 29/11/2020.
 //
 
 import Foundation
 
-enum BuiltinOperator: String, CustomStringConvertible {
+public enum BuiltinOperator: String, CustomStringConvertible {
   case plus = "+"
   case minus = "-"
   case star = "*"
@@ -40,9 +40,9 @@ enum BuiltinOperator: String, CustomStringConvertible {
   case rightShiftAssign = ">>="
   case leftShiftAssign = "<<="
 
-  // MARK: Internal
+  // MARK: Public
 
-  var description: String {
+  public var description: String {
     rawValue
   }
 }

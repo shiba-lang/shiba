@@ -30,21 +30,21 @@ fileprivate enum LexError: Error, CustomStringConvertible {
 
 // MARK: - Lexer
 
-final class Lexer {
+public struct Lexer {
 
   // MARK: Lifecycle
 
-  init(input: String) {
+  public init(input: String) {
     characters = Array(input.unicodeScalars)
   }
 
-  // MARK: Internal
+  // MARK: Public
 
-  var sourceLocation = SourceLocation(line: 1, column: 1)
-  var characters = [UnicodeScalar]()
-  var tokIndex = 0
+  public var sourceLocation: SourceLocation = SourceLocation(line: 1, column: 1)
+  public var characters = [UnicodeScalar]()
+  public var tokIndex = 0
 
-  func lex() throws -> [Token] {
+  public mutating func lex() throws -> [Token] {
     var tokens = [Token]()
     while true {
       do {
@@ -86,7 +86,7 @@ final class Lexer {
     SourceRange(start: start, end: sourceLocation)
   }
 
-  private func advance(_ n: Int = 1) {
+  private mutating func advance(_ n: Int = 1) {
     guard let char = currentChar else { return }
     for _ in 0..<n {
       if char == "\n" {
@@ -100,7 +100,7 @@ final class Lexer {
     }
   }
 
-  private func advanceToNextToken() throws -> Token {
+  private mutating func advanceToNextToken() throws -> Token {
     advanceWhile {
       $0.isSpace
     }
@@ -126,18 +126,19 @@ final class Lexer {
     // skip comments
     if currentChar == "/" {
       // skip `//`
-      if charAt(1) == "/" {
+      let nextChar = charAt(1)
+      if nextChar == "/" {
         advanceWhile {
           $0 != "\n"
         }
         return try advanceToNextToken()
-      } else if charAt(1) == "*" {
+      } else if nextChar == "*" {
         // skip `/*`
-        advanceWhile { _ in
-          currentSubstring(2) != "*/"
+        advance(2)
+        while charAt(0) != "*" || charAt(1) != "/" {
+          advance()
         }
-        advance()
-        advance()
+        advance(2)
         return try advanceToNextToken()
       }
     }
@@ -216,36 +217,36 @@ final class Lexer {
     return Token(kind: kind, range: range(start: startLocation))
   }
 
-  private func advanceIf(
+  private mutating func advanceIf(
     _ f: (UnicodeScalar) -> Bool,
     completion: () -> Void = {}
-  ) -> Bool {
-    guard let char = currentChar else { return false }
+  ) -> UnicodeScalar? {
+    guard let char = currentChar else { return nil }
     if f(char) {
       completion()
       advance()
-      return true
+      return char
     }
-    return false
+    return nil
   }
 
-  private func advanceWhile(
+  private mutating func advanceWhile(
     _ f: (UnicodeScalar) -> Bool,
     completion: () -> Void = {}
   ) {
-    while advanceIf(f, completion: completion) {}
+    while advanceIf(f) != nil {}
   }
 
-  private func collectWhile(_ f: (UnicodeScalar) -> Bool) -> String {
+  private mutating func collectWhile(_ f: (UnicodeScalar) -> Bool) -> String {
     var str = ""
-    advanceWhile(f) {
-      guard let c = currentChar else { return }
+    while let c = advanceIf(f) {
       str.append(String(c))
+
     }
     return str
   }
 
-  private func readCharacter() throws -> UnicodeScalar {
+  private mutating func readCharacter() throws -> UnicodeScalar {
     if currentChar == "\\" {
       advance()
       switch currentChar {

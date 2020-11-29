@@ -14,8 +14,9 @@ func testLexer() {
   }
   """
 
-  let tokens = try! Lexer(input: input).lex()
-  tokens.forEach { tok in
+  var tokens = Lexer(input: input)
+  let toks = try! tokens.lex()
+  toks.forEach { tok in
     print("tok: \(tok), length: \(tok.length)\n")
   }
 

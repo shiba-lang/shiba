@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - TokenKind
 
-enum TokenKind {
+public enum TokenKind {
   case number(value: Int, raw: String)
   case identifier(value: String)
   case char(value: UInt8)
@@ -70,7 +70,7 @@ enum TokenKind {
 
   // MARK: Lifecycle
 
-  init(op: String) {
+  public init(op: String) {
     switch op {
     case ";": self = .semicolon
     case ",": self = .comma
@@ -93,7 +93,7 @@ enum TokenKind {
     }
   }
 
-  init(identifier: String) {
+  public init(identifier: String) {
     switch identifier {
     case "fn": self = .fn
     case "init": self = .Init
@@ -130,9 +130,9 @@ enum TokenKind {
     }
   }
 
-  // MARK: Internal
+  // MARK: Public
 
-  var text: String {
+  public var text: String {
     switch self {
     case let .number(value, _): return "\(value)"
     case let .identifier(value): return value
@@ -193,7 +193,7 @@ enum TokenKind {
     }
   }
 
-  var isKeyword: Bool {
+  public var isKeyword: Bool {
     switch self {
     case .fn, .Init, .deinit, .extension, .sizeOf, .typedef, .nil, .while, .for,
          .in, .continue, .if, .else, .mut, .let, .return, .enum, .switch, .case,
@@ -205,26 +205,26 @@ enum TokenKind {
     }
   }
 
-  var isLiteral: Bool {
+  public var isLiteral: Bool {
     switch self {
     case .number, .char: return true
     default: return false
     }
   }
 
-  var isEOF: Bool {
+  public var isEOF: Bool {
     if case .eof = self { return true }
     return false
   }
 
-  var isLineSeparator: Bool {
+  public var isLineSeparator: Bool {
     switch self {
     case .newline, .semicolon: return true
     default: return false
     }
   }
 
-  var isString: Bool {
+  public var isString: Bool {
     if case .stringLiteral = self { return true }
     return false
   }
@@ -233,7 +233,7 @@ enum TokenKind {
 // MARK: Equatable
 
 extension TokenKind: Equatable {
-  static func ==(lhs: TokenKind, rhs: TokenKind) -> Bool {
+  public static func ==(lhs: TokenKind, rhs: TokenKind) -> Bool {
     switch (lhs, rhs) {
     case (.semicolon, .semicolon), (.newline, .newline), (.leftParen, .leftParen),
          (.rightParen, .rightParen), (.leftBrace, .leftBrace),

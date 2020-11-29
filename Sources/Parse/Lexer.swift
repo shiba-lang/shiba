@@ -165,18 +165,17 @@ final class Lexer {
       advance()
       let scalar = try readCharacter()
       let value = UInt8(scalar.value & 0xff)
-      guard currentChar == "'" else {
+      guard self.currentChar == "'" else {
         throw LexError.invalidCharacterLiteral(literal: "\(value)")
       }
       advance()
       return Token(kind: .char(value: value), range: range(start: startLocation))
     }
 
-    // \n, \t
     if currentChar == "\"" {
       advance()
       var str = ""
-      while currentChar != "\"" {
+      while self.currentChar != "\"" {
         str.append(String(try readCharacter()))
       }
       advance()

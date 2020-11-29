@@ -9,13 +9,8 @@ import Foundation
 
 func testLexer() {
   let input = """
-  // just simple thing
-  /*
-  hmmmm it work?
-  this is test for multi line comment
-  */
-  fn test() -> String {
-  	return "test something"
+  fn printTestToken() -> String {
+    return "test token..."
   }
   """
 

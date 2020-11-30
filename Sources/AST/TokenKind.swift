@@ -10,7 +10,7 @@ import Foundation
 // MARK: - TokenKind
 
 public enum TokenKind {
-  case number(value: Int, raw: String)
+  case number(value: Int64, raw: String)
   case identifier(value: String)
   case char(value: UInt8)
   case unknown(char: String)

@@ -9,21 +9,28 @@ import Foundation
 
 // MARK: - Expr
 
-class Expr: Equatable, Hashable {
+public class Expr: Equatable, Hashable {
 
   // MARK: Lifecycle
 
-  init(sourceRange: SourceRange? = nil) {
+  public init(sourceRange: SourceRange? = nil) {
     self.sourceRange = sourceRange
+  }
+
+  // MARK: Public
+
+  public static func ==(lhs: Expr, rhs: Expr) -> Bool {
+    lhs.equals(rhs)
+  }
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(ObjectIdentifier(self))
+    hasher.combine(0x3a0395ca)
   }
 
   // MARK: Internal
 
   let sourceRange: SourceRange?
-
-  static func ==(lhs: Expr, rhs: Expr) -> Bool {
-    lhs.equals(rhs)
-  }
 
   func startLoc() -> SourceLocation? {
     sourceRange?.start
@@ -35,11 +42,6 @@ class Expr: Equatable, Hashable {
 
   func equals(_ rhs: Expr) -> Bool {
     false
-  }
-
-  func hash(into hasher: inout Hasher) {
-    hasher.combine(ObjectIdentifier(self))
-    hasher.combine(0x3a0395ca)
   }
 
 }

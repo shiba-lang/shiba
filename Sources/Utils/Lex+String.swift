@@ -48,19 +48,19 @@ extension String {
     replacingOccurrences(of: string, with: "")
   }
 
-  func asNumber() -> Int? {
+  func asNumber() -> Int64? {
     let prefixMap = ["0x": 16, "0b": 2, "0o": 8]
     if count <= 2 {
-      return Int(self, radix: 10)
+      return Int64(self, radix: 10)
     }
     let prefixIndex = index(startIndex, offsetBy: 2)
     let prefix = String(self[..<prefixIndex])
     guard let radix = prefixMap[prefix] else {
-      return Int(removing("_"), radix: 10)
+      return Int64(removing("_"), radix: 10)
     }
 
     let suffixIndex = index(startIndex, offsetBy: 2)
     let suffix = String(removing("_")[suffixIndex...])
-    return Int(suffix, radix: radix)
+    return Int64(suffix, radix: radix)
   }
 }

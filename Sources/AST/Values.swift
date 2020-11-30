@@ -10,7 +10,7 @@ import Foundation
 // MARK: - ValExpr
 
 public class ValExpr: Expr {
-  var type: DataType? = nil
+  public var type: DataType? = nil
 }
 
 // MARK: - ConstantExpr
@@ -23,9 +23,9 @@ public class ConstantExpr: ValExpr {
     super.init(sourceRange: sourceRange)
   }
 
-  // MARK: Internal
+  // MARK: Public
 
-  var text: String {
+  public var text: String {
     ""
   }
 }
@@ -85,11 +85,11 @@ public class NumExpr: ConstantExpr {
   public let value: Int64
   public let raw: String
 
-  // MARK: Internal
-
-  override var text: String {
+  public override var text: String {
     "\(value)"
   }
+
+  // MARK: Internal
 
   override func equals(_ expr: Expr) -> Bool {
     guard let other = expr as? NumExpr else { return false }
@@ -137,9 +137,7 @@ public class TupleExpr: ValExpr {
 
   public let values: [ValExpr]
 
-  // MARK: Internal
-
-  override var type: DataType? {
+  public override var type: DataType? {
     get {
       var fieldTypes = [DataType]()
       for v in values {
@@ -243,11 +241,11 @@ public class BoolExpr: ConstantExpr {
 
   public let value: Bool
 
-  // MARK: Internal
-
-  override var type: DataType? {
+  public override var type: DataType? {
     get { .bool } set {}
   }
+
+  // MARK: Internal
 
   override func equals(_ expr: Expr) -> Bool {
     guard let expr = expr as? BoolExpr else { return false }
@@ -270,13 +268,11 @@ public class StringExpr: ConstantExpr {
 
   public let value: String
 
-  // MARK: Internal
-
-  override var type: DataType? {
+  public override var type: DataType? {
     get { .pointer(type: .int8) } set {}
   }
 
-  override var text: String {
+  public override var text: String {
     value
   }
 }
@@ -304,13 +300,11 @@ public class CharExpr: ConstantExpr {
 
   public let value: UInt8
 
-  // MARK: Internal
-
-  override var type: DataType? {
+  public override var type: DataType? {
     get { .int8 } set {}
   }
 
-  override var text: String {
+  public override var text: String {
     "\(value)"
   }
 }

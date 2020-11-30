@@ -28,6 +28,10 @@ public class Expr: Equatable, Hashable {
     hasher.combine(0x3a0395ca)
   }
 
+  public func equals(_ rhs: Expr) -> Bool {
+    false
+  }
+
   // MARK: Internal
 
   let sourceRange: SourceRange?
@@ -38,10 +42,6 @@ public class Expr: Equatable, Hashable {
 
   func endLoc() -> SourceLocation? {
     sourceRange?.end
-  }
-
-  func equals(_ rhs: Expr) -> Bool {
-    false
   }
 
 }

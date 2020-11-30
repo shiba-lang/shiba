@@ -41,9 +41,9 @@ public class VoidExpr: ValExpr {
     type = .void
   }
 
-  // MARK: Internal
+  // MARK: Public
 
-  override func equals(_ expr: Expr) -> Bool {
+  public override func equals(_ expr: Expr) -> Bool {
     expr is VoidExpr
   }
 }
@@ -59,9 +59,9 @@ public class NilExpr: ValExpr {
     type = .pointer(type: .int8)
   }
 
-  // MARK: Internal
+  // MARK: Public
 
-  override func equals(_ expr: Expr) -> Bool {
+  public override func equals(_ expr: Expr) -> Bool {
     guard let other = expr as? NilExpr else { return false }
     return other.type == type
   }
@@ -89,9 +89,7 @@ public class NumExpr: ConstantExpr {
     "\(value)"
   }
 
-  // MARK: Internal
-
-  override func equals(_ expr: Expr) -> Bool {
+  public override func equals(_ expr: Expr) -> Bool {
     guard let other = expr as? NumExpr else { return false }
     return other.value == value
   }
@@ -176,11 +174,7 @@ public class TupleFieldLookupExpr: ValExpr {
   public let field: Int
   public let fieldRange: SourceRange
 
-  // MARK: Internal
-
-  var decl: Expr? = nil
-
-  override func equals(_ rhs: Expr) -> Bool {
+  public override func equals(_ rhs: Expr) -> Bool {
     guard let rhs = rhs as? TupleFieldLookupExpr,
           field == rhs.field,
           lhs == rhs.lhs else
@@ -189,6 +183,11 @@ public class TupleFieldLookupExpr: ValExpr {
     }
     return true
   }
+
+  // MARK: Internal
+
+  var decl: Expr? = nil
+
 }
 
 // MARK: - FloatExpr
@@ -217,9 +216,7 @@ public class FloatExpr: ConstantExpr {
     "\(value)"
   }
 
-  // MARK: Internal
-
-  override func equals(_ expr: Expr) -> Bool {
+  public override func equals(_ expr: Expr) -> Bool {
     guard let expr = expr as? FloatExpr else { return false }
     return value == expr.value
   }
@@ -245,9 +242,7 @@ public class BoolExpr: ConstantExpr {
     get { .bool } set {}
   }
 
-  // MARK: Internal
-
-  override func equals(_ expr: Expr) -> Bool {
+  public override func equals(_ expr: Expr) -> Bool {
     guard let expr = expr as? BoolExpr else { return false }
     return value == expr.value
   }

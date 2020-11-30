@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - DeclContextKind
 
-enum DeclContextKind {
+public enum DeclContextKind {
   case function
   case variable
   case type
@@ -19,7 +19,7 @@ enum DeclContextKind {
 
 // MARK: - DeclAccessKind
 
-enum DeclAccessKind: String, CustomStringConvertible {
+public enum DeclAccessKind: String, CustomStringConvertible {
   case foreign = "foreign"
   case mutating = "mutating"
   case noreturn = "noreture"
@@ -27,13 +27,13 @@ enum DeclAccessKind: String, CustomStringConvertible {
   case indirect = "indirect"
   case implicit = "implicit"
 
-  // MARK: Internal
+  // MARK: Public
 
-  var description: String {
+  public var description: String {
     rawValue
   }
 
-  func isValid(on kind: DeclContextKind) -> Bool {
+  public func isValid(on kind: DeclContextKind) -> Bool {
     switch (self, kind) {
     case (.foreign, .function),
          (.foreign, .type),

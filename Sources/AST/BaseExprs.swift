@@ -48,20 +48,20 @@ public class Expr: Equatable, Hashable {
 
 // MARK: - BindingExpr
 
-final class BindingExpr: Expr {
+public class BindingExpr: Expr {
 
   // MARK: Lifecycle
 
-  init(name: Identifier, sourceRange: SourceRange? = nil) {
+  public init(name: Identifier, sourceRange: SourceRange? = nil) {
     self.name = name
     super.init(sourceRange: sourceRange)
   }
 
-  // MARK: Internal
+  // MARK: Public
 
-  let name: Identifier
+  public let name: Identifier
 
-  override func equals(_ rhs: Expr) -> Bool {
+  public override func equals(_ rhs: Expr) -> Bool {
     guard let rhs = rhs as? BindingExpr else { return false }
     return name == rhs.name
   }

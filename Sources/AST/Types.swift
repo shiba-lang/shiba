@@ -95,30 +95,6 @@ public enum DataType: CustomStringConvertible, Hashable {
     return false
   }
 
-  public static func ==(lhs: DataType, rhs: DataType) -> Bool {
-    switch (lhs, rhs) {
-    case (.int(let lhsWidth, let lhsSigned), .int(let rhsWidth, let rhsSigned)):
-      return lhsWidth == rhsWidth && lhsSigned == rhsSigned
-    case (.bool, .bool):
-      return true
-    case (.void, .void):
-      return true
-    case (.pointer(let lhsType), .pointer(type: let rhsType)):
-      return lhsType == rhsType
-    case (.any, .any):
-      return true
-    case (.floating(let lhsDouble), .floating(let rhsDouble)):
-      return lhsDouble == rhsDouble
-    case (.function(let lhsArgs, let lhsRet), .function(let rhsArgs, let rhsRet)):
-      return lhsArgs == rhsArgs && lhsRet == rhsRet
-    case (.tuple(let lhsFields), .tuple(let rhsFields)):
-      return lhsFields == rhsFields
-    case (.custom(let lhsName), .custom(let rhsName)):
-      return lhsName == rhsName
-    default: return false
-    }
-  }
-
   public func hash(into hasher: inout Hasher) {
     hasher.combine(description)
     hasher.combine(0x01a13f61)
@@ -131,6 +107,34 @@ public enum DataType: CustomStringConvertible, Hashable {
     return t.pointerLevel() + 1
   }
 
+  public func ref() -> TypeRefExpr {
+    TypeRefExpr(type: self, name: Identifier(name: "\(self)"))
+  }
+
+}
+
+public func ==(lhs: DataType, rhs: DataType) -> Bool {
+  switch (lhs, rhs) {
+  case (.int(let lhsWidth, let lhsSigned), .int(let rhsWidth, let rhsSigned)):
+    return lhsWidth == rhsWidth && lhsSigned == rhsSigned
+  case (.bool, .bool):
+    return true
+  case (.void, .void):
+    return true
+  case (.pointer(let lhsType), .pointer(type: let rhsType)):
+    return lhsType == rhsType
+  case (.any, .any):
+    return true
+  case (.floating(let lhsDouble), .floating(let rhsDouble)):
+    return lhsDouble == rhsDouble
+  case (.function(let lhsArgs, let lhsRet), .function(let rhsArgs, let rhsRet)):
+    return lhsArgs == rhsArgs && lhsRet == rhsRet
+  case (.tuple(let lhsFields), .tuple(let rhsFields)):
+    return lhsFields == rhsFields
+  case (.custom(let lhsName), .custom(let rhsName)):
+    return lhsName == rhsName
+  default: return false
+  }
 }
 
 // MARK: - DeclExpr
@@ -294,6 +298,33 @@ public class TypeDeclExpr: DeclExpr {
 
 }
 
+// MARK: - TypeAliasExpr
+
+public class TypeAliasExpr: DeclRefExpr<TypeDeclExpr> {
+
+  // MARK: Lifecycle
+
+  public init(
+    name: Identifier,
+    bound: TypeRefExpr,
+    sourceRange: SourceRange? = nil
+  ) {
+    self.name = name
+    self.bound = bound
+    super.init(sourceRange: sourceRange)
+  }
+
+  // MARK: Public
+
+  public let name: Identifier
+  public let bound: TypeRefExpr
+
+  public override func equals(_ rhs: Expr) -> Bool {
+    guard let rhs = rhs as? TypeAliasExpr else { return false }
+    return name == rhs.name && bound == rhs.bound
+  }
+}
+
 // MARK: - DeclRefExpr
 
 public class DeclRefExpr<DeclType: DeclExpr>: ValExpr {
@@ -407,6 +438,27 @@ public class TupleTypeRefExpr: TypeRefExpr {
   // MARK: Public
 
   public let fieldNames: [TypeRefExpr]
+}
+
+// MARK: - FieldLookupExpr
+
+public class FieldLookupExpr: ValExpr {
+
+  // MARK: Lifecycle
+
+  public init(lhs: ValExpr, name: Identifier, sourceRange: SourceRange? = nil) {
+    self.lhs = lhs
+    self.name = name
+    super.init(sourceRange: sourceRange)
+  }
+
+  // MARK: Public
+
+  public let lhs: ValExpr
+  public var decl: Expr? = nil
+  public var typeDecl: TypeDeclExpr? = nil
+  public let name: Identifier
+
 }
 
 public func ==(lhs: TypeRefExpr, rhs: DataType) -> Bool {

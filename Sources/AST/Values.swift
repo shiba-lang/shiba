@@ -272,6 +272,30 @@ public class StringExpr: ConstantExpr {
   }
 }
 
+// MARK: - VarExpr
+
+public class VarExpr: ValExpr {
+
+  // MARK: Lifecycle
+
+  public init(name: Identifier, sourceRange: SourceRange? = nil) {
+    self.name = name
+    super.init(sourceRange: sourceRange)
+  }
+
+  // MARK: Public
+
+  public let name: Identifier
+  public let isTypeVar = false
+  public var isSelf = false
+  public var decl: DeclExpr? = nil
+
+  public override func equals(_ expr: Expr) -> Bool {
+    guard let expr = expr as? VarExpr else { return false }
+    return name == expr.name
+  }
+}
+
 // MARK: - PoundFunctionExpr
 
 public class PoundFunctionExpr: StringExpr {
@@ -304,3 +328,64 @@ public class CharExpr: ConstantExpr {
   }
 }
 
+// MARK: - SubscriptExpr
+
+public class SubscriptExpr: ValExpr {
+
+  // MARK: Lifecycle
+
+  public init(lhs: ValExpr, amount: ValExpr, sourceRange: SourceRange? = nil) {
+    self.lhs = lhs
+    self.amount = amount
+    super.init(sourceRange: sourceRange)
+  }
+
+  // MARK: Public
+
+  public let lhs: ValExpr
+  public let amount: ValExpr
+
+}
+
+// MARK: - TernaryExpr
+
+public class TernaryExpr: ValExpr {
+
+  // MARK: Lifecycle
+
+  public init(
+    condition: ValExpr,
+    trueCase: ValExpr,
+    falseCase: ValExpr,
+    sourceRange: SourceRange? = nil
+  ) {
+    self.condition = condition
+    self.trueCase = trueCase
+    self.falseCase = falseCase
+    super.init(sourceRange: sourceRange)
+  }
+
+  // MARK: Public
+
+  public let condition: ValExpr
+  public let trueCase: ValExpr
+  public let falseCase: ValExpr
+}
+
+// MARK: - SizeofExpr
+
+public class SizeofExpr: ValExpr {
+
+  // MARK: Lifecycle
+
+  init(value: ValExpr, sourceRange: SourceRange? = nil) {
+    self.value = value
+    super.init(sourceRange: sourceRange)
+    type = .int64
+  }
+
+  // MARK: Public
+
+  public var value: ValExpr?
+  public var valueType: DataType?
+}

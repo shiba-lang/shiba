@@ -249,3 +249,31 @@ public class PoundDiagnosticExpr: Expr {
     content.text
   }
 }
+
+// MARK: - ExtensionExpr
+
+public class ExtensionExpr: DeclRefExpr<TypeDeclExpr> {
+
+  // MARK: Lifecycle
+
+  public init(
+    type: TypeRefExpr,
+    methods: [FuncDeclExpr],
+    sourceRange: SourceRange? = nil
+  ) {
+    self.methods = methods.map { $0.addingImplicitSelf(type.type!) }
+    typeRef = type
+    super.init(sourceRange: sourceRange)
+    self.type = type.type!
+  }
+
+  // MARK: Public
+
+  public let methods: [FuncDeclExpr]
+  public let typeRef: TypeRefExpr
+
+  public override func equals(_ expr: Expr) -> Bool {
+    guard let expr = expr as? ExtensionExpr else { return false }
+    return methods == expr.methods
+  }
+}

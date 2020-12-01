@@ -57,7 +57,6 @@ public enum TokenKind {
   case `case`
   case `break`
   case `default`
-  case `as`
   case `true`
   case `false`
 
@@ -116,7 +115,6 @@ public enum TokenKind {
     case "case": self = .case
     case "break": self = .break
     case "default": self = .default
-    case "as": self = .as
     case "true": self = .true
     case "false": self = .false
 
@@ -180,7 +178,6 @@ public enum TokenKind {
     case .case: return "case"
     case .break: return "break"
     case .default: return "default"
-    case .as: return "as"
     case .true: return "true"
     case .false: return "false"
 
@@ -197,7 +194,7 @@ public enum TokenKind {
     switch self {
     case .fn, .Init, .deinit, .extension, .sizeOf, .typedef, .nil, .while, .for,
          .in, .continue, .if, .else, .mut, .let, .return, .enum, .switch, .case,
-         .break, .default, .as, .true, .false:
+         .break, .default, .true, .false:
       return true
     case let .identifier(value):
       return DeclAccessKind(rawValue: value) != nil || value == "self"
@@ -249,7 +246,7 @@ extension TokenKind: Equatable {
          (.continue, .continue), (.true, .true), (.false, .false), (.eof, .eof),
          (.underscore, .underscore), (.poundFunction, .poundFunction),
          (.poundFile, .poundFile), (.poundWarning, .poundWarning),
-         (.poundError, .poundError), (.as, .as):
+         (.poundError, .poundError):
       return true
     case (.number(let lhsValue, let lhsRaw), .number(let rhsValue, let rhsRaw)):
       return lhsValue == rhsValue && lhsRaw == rhsRaw

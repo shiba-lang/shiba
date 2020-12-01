@@ -164,7 +164,134 @@ public class DeclExpr: BindingExpr {
 // MARK: - TypeDeclExpr
 
 public class TypeDeclExpr: DeclExpr {
-  // TODO: - Implement `TypeDeclExpr`
+
+  // MARK: Lifecycle
+
+  public init(
+    name: Identifier,
+    fields: [VarAssignExpr],
+    methods: [FuncDeclExpr] = [],
+    initializers: [FuncDeclExpr] = [],
+    attributes: [DeclAccessKind] = [],
+    deinit: FuncDeclExpr? = nil,
+    sourceRange: SourceRange? = nil
+  ) {
+    self.fields = fields
+    self.initializers = initializers
+    let type = DataType(name: name.name)
+    deinitializer = `deinit`?.addingImplicitSelf(type)
+    let synthInit = TypeDeclExpr.synthesizeInitializer(
+      fields: fields,
+      name: name,
+      attributes: attributes
+    )
+    self.initializers.append(synthInit)
+    super.init(
+      name: name,
+      type: type,
+      attributes: attributes,
+      sourceRange: sourceRange
+    )
+
+    methods.forEach {
+      self.addMethod($0, named: $0.name.name)
+    }
+
+    fields.forEach { field in
+      fieldDict[field.name.name] = field.type
+    }
+  }
+
+  // MARK: Public
+
+  private(set) public var fields: [VarAssignExpr]
+  private(set) public var methods = [FuncDeclExpr]()
+  private(set) public var initializers = [FuncDeclExpr]()
+  public let deinitializer: FuncDeclExpr?
+
+  public var isIndirect: Bool {
+    has(attribute: .indirect)
+  }
+
+  public static func synthesizeInitializer(
+    fields: [VarAssignExpr],
+    name: Identifier,
+    attributes: [DeclAccessKind]
+  ) -> FuncDeclExpr {
+    let type = DataType(name: name.name)
+    let typeRef = TypeRefExpr(type: type, name: name)
+    let initFields = fields.map { field in
+      FuncArgumentsAssignExpr(
+        name: field.name,
+        type: field.typeRef!,
+        externalName: field.name
+      )
+    }
+    return FuncDeclExpr(
+      name: name,
+      returnType: typeRef,
+      args: initFields,
+      kind: .initializer(type: type),
+      body: CompoundExpr(exprs: []),
+      attributes: attributes
+    )
+  }
+
+  public func indexOf(fieldName: Identifier) -> Int? {
+    fields.firstIndex { field in
+      field.name == fieldName
+    }
+  }
+
+  public func addMethod(_ expr: FuncDeclExpr, named name: String) {
+    let decl = expr.hasImplicitSelf ? expr : expr.addingImplicitSelf(type)
+    methods.append(decl)
+    var methods = methodDict[name] ?? []
+    methods.append(decl)
+    methodDict[name] = methods
+  }
+
+  public func addInitializzer(_ expr: FuncDeclExpr) {
+    initializers.append(expr)
+  }
+
+  public func addField(_ field: VarAssignExpr) {
+    fields.append(field)
+    fieldDict[field.name.name] = field.type
+  }
+
+  public func methods(named name: String) -> [FuncDeclExpr] {
+    methodDict[name] ?? []
+  }
+
+  public func field(named name: String) -> VarAssignExpr? {
+    for field in fields where field.name.name == name {
+      return field
+    }
+    return nil
+  }
+
+  public func typeOf(_ field: String) -> DataType? {
+    fieldDict[field]
+  }
+
+  public func createRef() -> TypeRefExpr {
+    TypeRefExpr(type: type, name: name)
+  }
+
+  public override func equals(_ rhs: Expr) -> Bool {
+    guard let rhs = rhs as? TypeDeclExpr,
+          type == rhs.type,
+          fields == rhs.fields,
+          methods == rhs.methods else { return false }
+    return true
+  }
+
+  // MARK: Private
+
+  private var fieldDict = [String: DataType]()
+  private var methodDict = [String: [FuncDeclExpr]]()
+
 }
 
 // MARK: - DeclRefExpr

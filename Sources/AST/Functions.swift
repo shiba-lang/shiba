@@ -277,12 +277,10 @@ public class ClosureExpr: ValExpr {
   public let returnType: TypeRefExpr
   public let body: CompoundExpr
 
+  private(set) public var captures = Set<Expr>()
+
   public func add(capture: Expr) {
     captures.insert(capture)
   }
-
-  // MARK: Internal
-
-  private(set) var captures = Set<Expr>()
 
 }

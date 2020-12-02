@@ -50,7 +50,7 @@ public class FuncDeclExpr: DeclExpr {
   public init(
     name: Identifier,
     returnType: TypeRefExpr,
-    args: [FuncArgumentsAssignExpr],
+    args: [FuncArgumentAssignExpr],
     kind: FunctionKind = .free,
     body: CompoundExpr? = nil,
     attributes: [DeclAccessKind] = [],
@@ -76,7 +76,7 @@ public class FuncDeclExpr: DeclExpr {
 
   // MARK: Public
 
-  public let args: [FuncArgumentsAssignExpr]
+  public let args: [FuncArgumentAssignExpr]
   public let body: CompoundExpr?
   public let returnType: TypeRefExpr
   public let hasVarArgs: Bool
@@ -146,7 +146,7 @@ public class FuncDeclExpr: DeclExpr {
     var args = self.args
     let typeName = Identifier(name: "\(type)")
     let typeRef = TypeRefExpr(type: type, name: typeName)
-    let arg = FuncArgumentsAssignExpr(name: "self", type: typeRef)
+    let arg = FuncArgumentAssignExpr(name: "self", type: typeRef)
     arg.isImplicitSelf = true
     arg.isMutable = has(attribute: .mutating)
     args.insert(arg, at: 0)
@@ -195,9 +195,9 @@ public class FuncCallExpr: ValExpr {
   }
 }
 
-// MARK: - FuncArgumentsAssignExpr
+// MARK: - FuncArgumentAssignExpr
 
-public class FuncArgumentsAssignExpr: VarAssignExpr {
+public class FuncArgumentAssignExpr: VarAssignExpr {
 
   // MARK: Lifecycle
 
@@ -224,7 +224,7 @@ public class FuncArgumentsAssignExpr: VarAssignExpr {
   public let externalName: Identifier?
 
   public override func equals(_ expr: Expr) -> Bool {
-    guard let expr = expr as? FuncArgumentsAssignExpr else { return false }
+    guard let expr = expr as? FuncArgumentAssignExpr else { return false }
     return name == expr.name
       && externalName == expr.externalName
       && rhs == expr.rhs
@@ -260,7 +260,7 @@ public class ClosureExpr: ValExpr {
   // MARK: Lifecycle
 
   public init(
-    args: [FuncArgumentsAssignExpr],
+    args: [FuncArgumentAssignExpr],
     returnType: TypeRefExpr,
     body: CompoundExpr,
     sourceRange: SourceRange? = nil
@@ -273,7 +273,7 @@ public class ClosureExpr: ValExpr {
 
   // MARK: Public
 
-  public let args: [FuncArgumentsAssignExpr]
+  public let args: [FuncArgumentAssignExpr]
   public let returnType: TypeRefExpr
   public let body: CompoundExpr
 

@@ -20,7 +20,7 @@ extension Parser {
   ) throws -> FuncDeclExpr {
     var attributes = attributes
     let startLoc = sourceLoc
-    var args = [FuncArgumentsAssignExpr]()
+    var args = [FuncArgumentAssignExpr]()
     var returnType = TypeRefExpr(type: .void, name: "Void")
     var hasVarArgs = false
     let kind: FunctionKind
@@ -74,13 +74,13 @@ extension Parser {
   }
 
   func parseFuncSignature() throws -> (
-    args: [FuncArgumentsAssignExpr],
+    args: [FuncArgumentAssignExpr],
     ret: TypeRefExpr,
     hasVarArgs: Bool
   ) {
     try consume(.leftParen)
     var hasVarArgs = false
-    var args = [FuncArgumentsAssignExpr]()
+    var args = [FuncArgumentAssignExpr]()
     while true {
       if case .rightParen = peek() {
         consumeToken()
@@ -116,7 +116,7 @@ extension Parser {
         break
       }
       let type = try parseType()
-      let arg = FuncArgumentsAssignExpr(
+      let arg = FuncArgumentAssignExpr(
         name: internalName,
         type: type,
         externalName: externalName,

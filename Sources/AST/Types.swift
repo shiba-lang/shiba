@@ -225,7 +225,7 @@ public class TypeDeclExpr: DeclExpr {
     let type = DataType(name: name.name)
     let typeRef = TypeRefExpr(type: type, name: name)
     let initFields = fields.map { field in
-      FuncArgumentsAssignExpr(
+      FuncArgumentAssignExpr(
         name: field.name,
         type: field.typeRef!,
         externalName: field.name

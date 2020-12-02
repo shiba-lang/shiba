@@ -8,6 +8,9 @@
 import Foundation
 
 extension Parser {
+
+  // MARK: Internal
+
   /// Value Expression
   /// val-expr ::= <identifier>[. <identifier>]
   /// 					 | <val-expr><func-call-args>
@@ -15,7 +18,7 @@ extension Parser {
   /// 					 | <val-expr> [ <num> ]
   /// 					 |
 
-  private func parseValExpr() throws -> ValExpr {
+  func parseValExpr() throws -> ValExpr {
     var valExpr: ValExpr? = nil
     let startLoc = sourceLoc
 
@@ -256,6 +259,8 @@ extension Parser {
     }
     return expr
   }
+
+  // MARK: Private
 
   private func attachPrefixToInfix(
     _ prefixOp: BuiltinOperator,

@@ -93,7 +93,6 @@ final class LexerTextStorage: NSTextStorage {
       range: fullRange
     )
     for token in tokens {
-      print(token)
       if token.isKeyword {
         addAttribute(
           NSAttributedString.Key.foregroundColor,
@@ -119,8 +118,53 @@ final class LexerTextStorage: NSTextStorage {
           range: token.range.nsRange
         )
       }
-
     }
+
+    let diag = DiagnosticEngine()
+    let context = ASTContext(
+      filename: "_semantic_highlight_",
+      diagnosticEngine: diag
+    )
+    let annotator = SourceAnnotator(attributes: attributes, context: context)
+    diag.register(annotator)
+
+    let driver = Driver(context: context)
+    let filename = self.filename
+    driver.add("Parser") { context in
+      let parser = Parser(tokens: tokens, context: context, filename: filename)
+      do {
+        try parser.parseTopLevel(into: context)
+      } catch let err as Diagnostic {
+        diag.add(error: err)
+      } catch let err{
+        diag.error("\(err)")
+      }
+    }
+
+    driver.add(pass: Sema.self)
+    driver.add(pass: TypeChecker.self)
+    driver.add("Source Annotation") { context in
+      annotator.run(in: context)
+      for attr in annotator.soureAttributes {
+        self.addAttribute(
+          NSAttributedString.Key(rawValue: attr.name),
+          value: attr.value,
+          range: attr.range
+        )
+      }
+    }
+
+    driver.run(in: context)
+    diag.consumeDiagnostics()
+
+    for attr in annotator.errorAttributes {
+      addAttribute(
+        NSAttributedString.Key(rawValue: attr.name),
+        value: attr.value,
+        range: attr.range
+      )
+    }
+
     super.processEditing()
   }
 

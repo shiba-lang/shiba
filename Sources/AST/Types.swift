@@ -61,6 +61,11 @@ public enum DataType: CustomStringConvertible, Hashable {
   public static let double: DataType = .floating(type: .double)
   public static let float80: DataType = .floating(type: .float80)
 
+  public var rootType: DataType {
+    guard case .pointer(let type) = self else { return self }
+    return type.rootType
+  }
+
   public var description: String {
     switch self {
     case .int(width: 64, let signed):
@@ -109,6 +114,19 @@ public enum DataType: CustomStringConvertible, Hashable {
 
   public func ref() -> TypeRefExpr {
     TypeRefExpr(type: self, name: Identifier(name: "\(self)"))
+  }
+
+  public func canCoerceTo(_ type: DataType) -> Bool {
+    if self == type { return true }
+    switch (self, type) {
+    case (.int, .int): return true
+    case (.int, .floating): return true
+    case (.floating, .int): return true
+    case (.int, .pointer): return true
+    case (.pointer, .int): return true
+    case (.pointer, .pointer): return true
+    default: return false
+    }
   }
 
 }

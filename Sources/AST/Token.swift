@@ -8,30 +8,36 @@
 import Foundation
 
 public struct Token {
-  let kind: TokenKind
-  let range: SourceRange
 
-  var length: Int {
+  // MARK: Public
+
+  public var length: Int {
     range.end.charOffset - range.start.charOffset
   }
 
-  var isKeyword: Bool {
+  public var isKeyword: Bool {
     kind.isKeyword
   }
 
-  var isLiteral: Bool {
+  public var isLiteral: Bool {
     kind.isLiteral
   }
 
-  var isLineSeparator: Bool {
+  public var isLineSeparator: Bool {
     kind.isLineSeparator
   }
 
-  var isString: Bool {
+  public var isString: Bool {
     kind.isString
   }
 
-  var isEOF: Bool {
+  public var isEOF: Bool {
     kind.isEOF
   }
+
+  // MARK: Internal
+
+  let kind: TokenKind
+  let range: SourceRange
+
 }

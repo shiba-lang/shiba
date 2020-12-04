@@ -55,6 +55,10 @@ public class Driver: Pass {
     }
   }
 
+  public func add<PassType: Pass>(pass: PassType.Type) {
+    passes.append(pass.init(context: context))
+  }
+
   // MARK: Internal
 
   private(set) var passes = [Pass]()

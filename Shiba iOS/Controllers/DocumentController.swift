@@ -28,8 +28,23 @@ final class DocumentController: UIViewController {
 
   }
 
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if segue.identifier == "ShowInput" {
+      let destination = segue.destination as? InputViewController
+      destination?.document = sender as? SourceDocument
+      destination?.title = destination?.document.fileName
+    }
+  }
+
+  // MARK: Private
+
+  @IBOutlet private weak var tableView: UITableView!
+  private var filePath = URL(fileURLWithPath: DocumentController.documentsDir)
+  private var documents = [SourceDocument]()
+  private var fileManager = FileManager.default
+
   @IBAction
-  func didTappedNewDocument(_ sender: Any) {
+  private func didTappedNewDocument(_ sender: Any) {
     let alert = UIAlertController(
       title: "New Document",
       message: "Enter a title",
@@ -53,21 +68,6 @@ final class DocumentController: UIViewController {
     alert.addAction(cancleAction)
     present(alert, animated: true)
   }
-
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    if segue.identifier == "ShowInput" {
-      let destination = segue.destination as? InputViewController
-      destination?.document = sender as? SourceDocument
-      destination?.title = destination?.document.fileName
-    }
-  }
-
-  // MARK: Private
-
-  @IBOutlet private weak var tableView: UITableView!
-  private var filePath = URL(fileURLWithPath: DocumentController.documentsDir)
-  private var documents = [SourceDocument]()
-  private var fileManager = FileManager.default
 
   private func document(title: String) -> SourceDocument {
     var url = filePath.appendingPathComponent(title)

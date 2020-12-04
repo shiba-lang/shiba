@@ -7,31 +7,6 @@
 
 import UIKit
 
-// MARK: - TextAttributes
-
-struct TextAttributes {
-  let font: UIFont
-  let boldFont: UIFont
-  let keyword: UIColor
-  let literal: UIColor
-  let normal: UIColor
-  let comment: UIColor
-  let string: UIColor
-  let internalName: UIColor
-  let externalName: UIColor
-}
-
-extension UIColor {
-  static func rgb(
-    red: CGFloat,
-    green: CGFloat,
-    blue: CGFloat,
-    alpha: CGFloat = 1
-  ) -> UIColor {
-    UIColor(red: red / 255, green: green / 255, blue: blue / 255, alpha: alpha)
-  }
-}
-
 // MARK: - Styles
 
 enum Styles {
@@ -43,10 +18,12 @@ enum Styles {
     static let string = UIColor.rgb(red: 219.0, green: 44.0, blue: 56.0)
     static let internalName = UIColor.rgb(red: 131.0, green: 192.0, blue: 87.0)
     static let externalName = UIColor.rgb(red: 0.0, green: 160.0, blue: 190.0)
+    static let warning = UIColor.rgb(red: 1.0, green: 221.0, blue: 0)
+    static let error = UIColor.rgb(red: 222.0, green: 7.0, blue: 7.0)
   }
 
   enum Text {
-    static let font = UIFont(name: "Menlo", size: 16.0)
-    static let boldFont = UIFont(name: "Menlo-bold", size: 14.0)
+    static let font = UIFont(name: "Menlo", size: 16.0)!
+    static let boldFont = UIFont(name: "Menlo-bold", size: 14.0)!
   }
 }

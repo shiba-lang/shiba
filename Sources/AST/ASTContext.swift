@@ -68,13 +68,15 @@ public final class ASTContext {
 
   // MARK: Lifecycle
 
-  public init(diagnosticEngine: DiagnosticEngine) {
+  public init(filename: String, diagnosticEngine: DiagnosticEngine) {
     diag = diagnosticEngine
+    self.filename = filename
   }
 
   // MARK: Public
 
   public let diag: DiagnosticEngine
+  public let filename: String
 
   public var functions = [FuncDeclExpr]()
   public var types = [TypeDeclExpr]()
@@ -197,6 +199,48 @@ public final class ASTContext {
     diagnostics.append(diagnosticExpr)
   }
 
+  public func global(named name: Identifier) -> VarAssignExpr? {
+    globalDeclMap[name.name]
+  }
+
+  public func global(named name: String) -> VarAssignExpr? {
+    globalDeclMap[name]
+  }
+
+  public func mutability(of expr: FieldLookupExpr) -> Mutability {
+    guard let decl = expr.decl else {
+      fatalError("no decl in mutability check")
+    }
+    let lhsMutability = mutability(of: expr.lhs)
+    guard case .mutable = lhsMutability else {
+      return lhsMutability
+    }
+    switch decl {
+    case let decl as VarAssignExpr:
+      return decl.isMutable ? .mutable : .immutable(culprit: expr.name)
+    case let decl as FuncDeclExpr:
+      return decl.has(attribute: .mutating) ? .mutable : .immutable(culprit: expr.name)
+    default:
+      return .immutable(culprit: nil)
+    }
+  }
+
+  public func isIntrinsic(type: DataType) -> Bool {
+    if isAlias(type: type) {
+      return false
+    }
+
+    if let decl = decl(for: type, canonicalized: false) {
+      return isIntrinsic(decl: decl)
+    }
+
+    return true
+  }
+
+  public func isIntrinsic(decl: DeclExpr) -> Bool {
+    decl.has(attribute: .foreign) || decl.sourceRange == nil
+  }
+
   @discardableResult
   public func add(_ alias: TypeAliasExpr) -> Bool {
     guard typeAliasMap[alias.name.name] == nil else {
@@ -258,6 +302,84 @@ public final class ASTContext {
     return false
   }
 
+  public func isCircularType(_ typeDecl: TypeDeclExpr) -> Bool {
+    containsInLayout(type: typeDecl.type, typeDecl: typeDecl, base: true)
+  }
+
+  public func matches(_ type1: DataType?, _ type2: DataType?) -> Bool {
+    switch (type1, type2) {
+    case (nil, nil): return true
+    case (_, nil): return false
+    case (nil, _): return false
+    case (let t1?, let t2?):
+      let t1Can = canonicalType(t1)
+      let t2Can = canonicalType(t2)
+      return t1Can == t2Can
+    default:
+      return false
+    }
+  }
+
+  public func isValidType(_ type: DataType) -> Bool {
+    switch type {
+    case .pointer(let subtype):
+      return isValidType(subtype)
+    case .custom:
+      let alias = isAlias(type: type)
+      let canonical = alias ? canonicalType(type) : type
+      if decl(for: canonical) != nil {
+        return true
+      }
+      return alias ? isValidType(canonical) : false
+    case .function(let args, let ret):
+      for arg in args where !isValidType(arg) {
+        return false
+      }
+      return isValidType(ret)
+    default:
+      return true
+    }
+  }
+
+  public func canCoerce(_ type: DataType, to other: DataType) -> Bool {
+    // should be able to cast between an indirect type and a pointer.
+    if let decl = decl(for: other),
+       decl.isIndirect,
+       case .pointer = type
+    {
+      return true
+    }
+
+    if let decl = decl(for: type),
+       decl.isIndirect,
+       case .pointer = other
+    {
+      return true
+    }
+    return type.canCoerceTo(other)
+  }
+
+  // MARK: Internal
+
+  func mutability(of expr: Expr) -> Mutability {
+    switch expr {
+    case let expr as VarExpr:
+      return mutability(of: expr)
+    case let expr as FieldLookupExpr:
+      return mutability(of: expr)
+    case let expr as SubscriptExpr:
+      return mutability(of: expr)
+    case let expr as ParenExpr:
+      return mutability(of: expr.value)
+    case let expr as PrefixOperatorExpr:
+      return mutability(of: expr.rhs)
+    case let expr as TupleFieldLookupExpr:
+      return mutability(of: expr.lhs)
+    default:
+      return .immutable(culprit: nil)
+    }
+  }
+
   // MARK: Private
 
   private var funcDeclMap = [String: [FuncDeclExpr]]()
@@ -272,5 +394,34 @@ public final class ASTContext {
   ]
   private var globalDeclMap = [String: VarAssignExpr]()
   private var typeAliasMap = [String: TypeAliasExpr]()
+
+  private func containsInLayout(
+    type: DataType,
+    typeDecl: TypeDeclExpr,
+    base: Bool = false
+  ) -> Bool {
+    if !base && matches(typeDecl.type, type) {
+      return true
+    }
+    for field in typeDecl.fields {
+      if case .pointer = field.type {
+        continue
+      }
+      if let decl = decl(for: field.type),
+         decl.isIndirect,
+         containsInLayout(type: type, typeDecl: decl)
+      {
+        return true
+      }
+    }
+    return false
+  }
+
+  private func isAlias(type: DataType) -> Bool {
+    if case .custom(let name) = type {
+      return typeAliasMap[name] != nil
+    }
+    return false
+  }
 
 }

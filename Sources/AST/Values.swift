@@ -261,7 +261,7 @@ public class StringExpr: ConstantExpr {
 
   // MARK: Public
 
-  public let value: String
+  public var value: String
 
   public override var type: DataType? {
     get { .pointer(type: .int8) } set {}

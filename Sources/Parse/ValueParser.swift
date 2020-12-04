@@ -133,6 +133,9 @@ extension Parser {
         raw: "\(sourceLoc.line)",
         sourceRange: tok.range
       )
+    case .poundFile:
+      consumeToken()
+      valExpr = StringExpr(value: filename, sourceRange: tok.range)
     default:
       let err = ParseError.unexpectedExpression(expected: "value")
       throw Diagnostic.error(err, loc: currentToken.range.start).highlighting(currentToken.range)

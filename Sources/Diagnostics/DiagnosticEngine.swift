@@ -85,10 +85,44 @@ public struct Diagnostic: Error, CustomStringConvertible {
 
 public class DiagnosticEngine {
 
+  // MARK: Public
+
+  public func register(_ consumer: DiagnosticConsumer) {
+    consumers.append(consumer)
+  }
+
+  public func consumeDiagnostics() {
+    let diags = (warnings + errors).sorted { a, b in
+      guard let aLoc = a.sourceLocation else { return false }
+      guard let bLoc = b.sourceLocation else { return true }
+      return aLoc.charOffset < bLoc.charOffset
+    }
+    for diag in diags {
+      for consumer in consumers {
+        consumer.consume(diag)
+      }
+    }
+  }
+
+  public func error(
+    _ message: String,
+    loc: SourceLocation? = nil,
+    highlights: [SourceRange?] = []
+  ) {
+    let error = Diagnostic(
+      message: message,
+      diagnosticType: .error,
+      sourceLocation: loc,
+      highlights: highlights.compactMap { $0 }
+    )
+    errors.append(error)
+  }
+
   // MARK: Internal
 
   private(set) var warnings = [Diagnostic]()
   private(set) var errors = [Diagnostic]()
+  private(set) var consumers = [DiagnosticConsumer]()
 
   var hasErrors: Bool {
     !errors.isEmpty
@@ -122,22 +156,6 @@ public class DiagnosticEngine {
 
   func add(warning: Diagnostic) {
     warnings.append(warning)
-  }
-
-  // MARK: Private
-
-  private func error(
-    _ message: String,
-    loc: SourceLocation? = nil,
-    highlights: [SourceRange?] = []
-  ) {
-    let error = Diagnostic(
-      message: message,
-      diagnosticType: .error,
-      sourceLocation: loc,
-      highlights: highlights.compactMap { $0 }
-    )
-    errors.append(error)
   }
 
 }

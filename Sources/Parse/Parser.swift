@@ -49,9 +49,10 @@ public final class Parser {
 
   // MARK: Lifecycle
 
-  init(tokens: [Token], context: ASTContext) {
+  init(tokens: [Token], context: ASTContext, filename: String) {
     self.tokens = tokens
     self.context = context
+    self.filename = filename
   }
 
   // MARK: Public
@@ -95,6 +96,7 @@ public final class Parser {
   var tokIndex = 0
   var tokens: [Token]
   let context: ASTContext
+  let filename: String
 
   var currentToken: Token {
     guard tokens.indices.contains(tokIndex) else {

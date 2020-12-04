@@ -75,7 +75,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="aoeuaoeu" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="UYl-4Z-rZW">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" text="aoeuaoeu" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="UYl-4Z-rZW">
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <color key="backgroundColor" name="Background"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -95,15 +95,56 @@
                     <navigationItem key="navigationItem" id="oZK-zh-Enh">
                         <barButtonItem key="rightBarButtonItem" systemItem="play" id="2EC-7c-yRt">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="didTappedRunButton:" destination="sCc-Z6-gyO" id="Yln-5a-7ZR"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="textView" destination="UYl-4Z-rZW" id="8yQ-ym-6B4"/>
+                        <segue destination="gZS-zn-DT6" kind="presentation" identifier="ShowRun" id="HTC-T0-abz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="srd-gW-dBf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1849" y="98"/>
+        </scene>
+        <!--Result-->
+        <scene sceneID="O0J-gm-rKi">
+            <objects>
+                <viewController id="ELc-bJ-5Tj" customClass="RunViewController" customModule="Shiba_iOS" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="40O-py-VVl">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="tB7-qd-1Of">
+                                <rect key="frame" x="0.0" y="56" width="414" height="752"/>
+                                <color key="backgroundColor" name="Background"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="f3t-3K-bbE"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="tB7-qd-1Of" firstAttribute="leading" secondItem="f3t-3K-bbE" secondAttribute="leading" id="D4S-7r-qIG"/>
+                            <constraint firstItem="f3t-3K-bbE" firstAttribute="trailing" secondItem="tB7-qd-1Of" secondAttribute="trailing" id="kwA-jg-N2V"/>
+                            <constraint firstItem="f3t-3K-bbE" firstAttribute="bottom" secondItem="tB7-qd-1Of" secondAttribute="bottom" id="pkE-cW-fxt"/>
+                            <constraint firstItem="tB7-qd-1Of" firstAttribute="top" secondItem="f3t-3K-bbE" secondAttribute="top" id="pxe-Y7-LZQ"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Result" id="r7j-uC-SLO">
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="UCR-Tk-G5Z"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="textView" destination="tB7-qd-1Of" id="TB5-M6-JVL"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="osL-pU-o79" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3774" y="98"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="hYQ-Sb-2Id">
@@ -126,6 +167,28 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HWL-Rj-2uU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="137.68115942028987" y="98.4375"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="rEZ-Qo-zbc">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="gZS-zn-DT6" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="skJ-rO-hfo">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" name="primary"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="ELc-bJ-5Tj" kind="relationship" relationship="rootViewController" id="DDO-hN-QWP"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="D0E-7b-cra" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2733" y="98"/>
         </scene>
     </scenes>
     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

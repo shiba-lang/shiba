@@ -6,12 +6,12 @@ Shiba is a compiled, simple, type-safe programming language. Written in Swift
 ### Main
 - [x] Lexical analysis
 - [x] Parser
-- [ ] AST
-- [ ] Sema
+- [x] AST
+- [x] Sema
 - [ ] LLVM IR Gen
-- [ ] Diagnostics
+- [x] Diagnostics
 - [ ] Runtime
-- [ ] Driver
+- [x] Driver
 
 ### Standard library
 - [ ] Array

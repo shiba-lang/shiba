@@ -8,6 +8,9 @@
 import UIKit
 
 final class RunViewController: UIViewController {
+
+  // MARK: Internal
+
   @IBOutlet weak var textView: UITextView!
 
   weak var driver: Driver!
@@ -35,5 +38,13 @@ final class RunViewController: UIViewController {
         }
       }
     }
+  }
+
+  // MARK: Private
+
+
+  @IBAction
+  private func didTappedDoneButton(_ sender: Any) {
+    dismiss(animated: true)
   }
 }

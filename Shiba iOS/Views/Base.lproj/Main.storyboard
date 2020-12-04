@@ -136,7 +136,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Result" id="r7j-uC-SLO">
-                        <barButtonItem key="rightBarButtonItem" title="Done" id="UCR-Tk-G5Z"/>
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="UCR-Tk-G5Z">
+                            <connections>
+                                <action selector="didTappedDoneButton:" destination="ELc-bJ-5Tj" id="UMA-Nk-euz"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="textView" destination="tB7-qd-1Of" id="TB5-M6-JVL"/>

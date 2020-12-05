@@ -24,6 +24,6 @@ enum Styles {
 
   enum Text {
     static let font = UIFont(name: "Menlo", size: 16.0)!
-    static let boldFont = UIFont(name: "Menlo-bold", size: 14.0)!
+    static let boldFont = UIFont(name: "Menlo-bold", size: 16.0)!
   }
 }

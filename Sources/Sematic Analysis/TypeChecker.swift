@@ -36,7 +36,7 @@ fileprivate enum TypeCheckError: Error, CustomStringConvertible {
     case let .invalidBinOpArgs(op, lhs, rhs):
       return "cannot apply binary operator '\(op)' to operands of type '\(lhs)' and '\(rhs)'"
     case let .typeMismatch(expected, got):
-      return "type mismatch (expected value of type '\(expected)`, got '\(got)')"
+      return "type mismatch (expected value of type '\(expected)', got '\(got)')"
     case let .nonBooleanTernary(got):
       return "ternary condition must be a Bool (got '\(got)')"
     case let .nonBoolCondition(got):

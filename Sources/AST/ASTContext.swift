@@ -159,8 +159,19 @@ public final class ASTContext {
     if funcDecl.name == "main" {
       setMain(funcDecl)
     }
-    //		let decls = functions(named: funcDecl.name)
-    // TODO: - check error sema
+    let decls = functions(named: funcDecl.name)
+    let declNames = decls.map {
+      Mangler.mangle($0)
+    }
+
+    if declNames.contains(Mangler.mangle(funcDecl)) {
+      error(
+        ASTError.duplicateFunction(name: funcDecl.name),
+        loc: funcDecl.name.range?.start,
+        highlights: [funcDecl.name.range]
+      )
+      return
+    }
 
     var existing = funcDeclMap[funcDecl.name.name] ?? []
     existing.append(funcDecl)

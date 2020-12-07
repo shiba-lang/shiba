@@ -32,7 +32,7 @@ final class DocumentController: UIViewController {
     if segue.identifier == "ShowInput" {
       let destination = segue.destination as? InputViewController
       destination?.document = sender as? SourceDocument
-      destination?.title = destination?.document.fileName
+      destination?.title = destination?.document.filename
     }
   }
 
@@ -111,7 +111,7 @@ extension DocumentController: UITableViewDataSource, UITableViewDelegate {
       for: indexPath
     )
     let document = documents[indexPath.row]
-    cell.textLabel?.text = document.fileName
+    cell.textLabel?.text = document.filename
     return cell
   }
 
@@ -126,7 +126,7 @@ extension DocumentController: UITableViewDataSource, UITableViewDelegate {
         if success {
           self.performSegue(withIdentifier: "ShowInput", sender: document)
         } else {
-          self.showError("Failed to \(message) '\(document.fileName)")
+          self.showError("Failed to \(message) '\(document.filename)")
         }
       }
     }

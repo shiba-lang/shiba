@@ -11,12 +11,12 @@ if-expr             ::= if <val-expr> <compound-expr>
 while-expr          ::= while <val-expr> <compound-expr>
 for-loop-expr       ::= for <expr>; <val-expr>; <expr> <compound-expr>
 fun-call-args       ::= ([<label>:] <val-expr>,*)
-compound-expr       ::= { [ <if-expr> | <while-expr> 
+compound-expr       ::= { [ <if-expr> | <while-expr>
                           | <var-assgin-expr> | <return-expr>
                           | <val-expr> ];* }
 fun-decl            ::= fn <name>([<name> [internal-name]: <typename>,]*): <typename> <compound-expr>
 field-decl          ::= mut <name>: <identifier>;
-type-decl           ::= typedef <identifier> { [<field-decl> | fun-decl]* }                          
+type-decl           ::= type <identifier> { [<field-decl> | fun-decl]* }
 num-char            ::= 0-9 | _
 num-expr            ::= <num-char>*
 hex-char            ::= a-f | A-F | 0-9

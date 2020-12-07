@@ -187,6 +187,15 @@ public class DeclExpr: BindingExpr {
 
 public class TypeDeclExpr: DeclExpr {
 
+  private(set) public var fields: [VarAssignExpr]
+  private(set) public var methods = [FuncDeclExpr]()
+  private(set) public var initializers = [FuncDeclExpr]()
+  public let deinitializer: FuncDeclExpr?
+
+  public var isIndirect: Bool {
+    has(attribute: .indirect)
+  }
+
   // MARK: Lifecycle
 
   public init(
@@ -224,16 +233,7 @@ public class TypeDeclExpr: DeclExpr {
     }
   }
 
-  // MARK: Public
-
-  private(set) public var fields: [VarAssignExpr]
-  private(set) public var methods = [FuncDeclExpr]()
-  private(set) public var initializers = [FuncDeclExpr]()
-  public let deinitializer: FuncDeclExpr?
-
-  public var isIndirect: Bool {
-    has(attribute: .indirect)
-  }
+  // MARK: - Public
 
   public static func synthesizeInitializer(
     fields: [VarAssignExpr],

@@ -66,7 +66,7 @@ final class InputViewController: UIViewController {
 
     storage = LexerTextStorage(
       attributes: colorScheme,
-      filename: document.fileName
+      filename: document.filename
     )
     storage.addLayoutManager(textView.layoutManager)
     storage.append(NSAttributedString(string: document.sourceText))
@@ -89,7 +89,7 @@ final class InputViewController: UIViewController {
     super.viewDidDisappear(animated)
     document.close { success in
       if !success {
-        self.showError("Failed to save \(self.document.fileName)")
+        self.showError("Failed to save \(self.document.filename)")
       }
     }
   }
@@ -106,12 +106,12 @@ final class InputViewController: UIViewController {
             let destination = navController.topViewController as? RunViewController else { return }
       diagnosticEngine = DiagnosticEngine()
       context = ASTContext(
-        filename: document.fileName,
+        filename: document.filename,
         diagnosticEngine: diagnosticEngine
       )
       driver = Driver(context: context)
       let text = storage.string
-      let fileName = document.fileName
+      let fileName = document.filename
       driver.add("lexer and parser") { context in
         var lexer = Lexer(input: text)
         do {

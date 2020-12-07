@@ -17,7 +17,7 @@ fileprivate enum DocumentError: Error {
 // MARK: - SourceDocument
 
 final class SourceDocument: UIDocument {
-  var fileName: String {
+  var filename: String {
     fileURL.lastPathComponent
   }
 

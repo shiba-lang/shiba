@@ -67,7 +67,7 @@ public final class Parser {
       switch peek() {
       case .fn:
         context.add(try parseFuncDecl(attrs))
-      case .typedef:
+      case .type:
         let expr = try parseTypeDecl(attrs)
         if let typeDecl = expr as? TypeDeclExpr {
           context.add(typeDecl)
@@ -227,7 +227,7 @@ extension Parser {
       nextKind = .function
     case .let, .mut:
       nextKind = .variable
-    case .typedef:
+    case .type:
       nextKind = .type
     case .extension:
       nextKind = .extension
@@ -306,11 +306,11 @@ extension Parser {
 
   /// Type Declaration
   ///
-  /// type-decl ::= typedef <typename> {
+  /// type-decl ::= type <typename> {
   /// 	[<field-decl> | <fn-decl>]*
   /// }
   func parseTypeDecl(_ attributes: [DeclAccessKind]) throws -> Expr {
-    try consume(.typedef)
+    try consume(.type)
     let startLoc = sourceLoc
     let name = try parseIdentifier()
 

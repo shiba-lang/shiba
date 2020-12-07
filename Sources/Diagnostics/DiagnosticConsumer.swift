@@ -13,13 +13,3 @@ public protocol DiagnosticConsumer: AnyObject {
   func consume(_ diagnostic: Diagnostic)
 }
 
-// MARK: - StreamConsumer
-
-public class StreamConsumer: DiagnosticConsumer {
-
-  public func consume(_ diagnostic: Diagnostic) {
-
-  }
-
-
-}

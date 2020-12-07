@@ -41,7 +41,7 @@ public enum TokenKind {
   case `deinit`
   case `extension`
   case sizeOf
-  case typedef
+  case type
   case `nil`
   case `while`
   case `for`
@@ -99,7 +99,7 @@ public enum TokenKind {
     case "deinit": self = .deinit
     case "extension": self = .extension
     case "sizeof": self = .sizeOf
-    case "typedef": self = .typedef
+    case "type": self = .type
     case "nil": self = .nil
     case "while": self = .while
     case "for": self = .for
@@ -162,7 +162,7 @@ public enum TokenKind {
     case .deinit: return "deinit"
     case .extension: return "extension"
     case .sizeOf: return "sizeof"
-    case .typedef: return "typedef"
+    case .type: return "type"
     case .nil: return "nil"
     case .while: return "while"
     case .for: return "for"
@@ -192,7 +192,7 @@ public enum TokenKind {
 
   public var isKeyword: Bool {
     switch self {
-    case .fn, .Init, .deinit, .extension, .sizeOf, .typedef, .nil, .while, .for,
+    case .fn, .Init, .deinit, .extension, .sizeOf, .type, .nil, .while, .for,
          .in, .continue, .if, .else, .mut, .let, .return, .enum, .switch, .case,
          .break, .default, .true, .false:
       return true
@@ -239,7 +239,7 @@ extension TokenKind: Equatable {
          (.arrow, .arrow), (.ellipsis, .ellipsis), (.dot, .dot),
          (.questionMark, .questionMark), (.fn, .fn), (.Init, .Init),
          (.deinit, .deinit), (.extension, .extension), (.sizeOf, .sizeOf),
-         (.typedef, .typedef), (.while, .while), (.for, .for), (.nil, .nil),
+         (.type, .type), (.while, .while), (.for, .for), (.nil, .nil),
          (.if, .if), (.else, .else), (.in, .in), (.let, .let), (.mut, .mut),
          (.enum, .enum), (.return, .leftParen), (.switch, .switch),
          (.case, .case), (.default, .default), (.break, .break),

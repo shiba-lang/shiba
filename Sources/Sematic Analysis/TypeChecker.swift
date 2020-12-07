@@ -175,7 +175,7 @@ public class TypeChecker: ASTTransformer, Pass {
     super.visitVarExpr(expr)
   }
 
-  public override func visitVarAssignExpr(_ expr: VarAssignExpr) -> Result {
+  public override func visitVarAssignExpr(_ expr: VarAssignExpr) {
     if let rhs = expr.rhs {
       guard let rhsType = rhs.type else { return }
       if !matches(expr.type, rhsType) {
@@ -203,7 +203,7 @@ public class TypeChecker: ASTTransformer, Pass {
     super.visitIfExpr(expr)
   }
 
-  public override func visitFuncArgumentAssignExpr(_ expr: FuncArgumentAssignExpr) -> Result {
+  public override func visitFuncArgumentAssignExpr(_ expr: FuncArgumentAssignExpr) {
     if let rhsType = expr.rhs?.type, !matches(expr.type, rhsType) {
       error(
         TypeCheckError.typeMismatch(expected: expr.type, got: rhsType),
@@ -214,7 +214,7 @@ public class TypeChecker: ASTTransformer, Pass {
     super.visitFuncArgumentAssignExpr(expr)
   }
 
-  public override func visitReturnExpr(_ expr: ReturnExpr) -> Result {
+  public override func visitReturnExpr(_ expr: ReturnExpr) {
     guard let returnType = currentClosure?.returnType.type ?? currentFunction?.returnType.type,
           let valType = expr.value.type else { return }
     if !matches(valType, returnType) {

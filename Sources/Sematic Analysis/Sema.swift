@@ -247,7 +247,7 @@ public class Sema: ASTTransformer, Pass {
     expr.type = expr.value.type
   }
 
-  public override func visitSizeofExpr(_ expr: SizeofExpr) -> Result {
+  public override func visitSizeofExpr(_ expr: SizeofExpr) {
     let handleVar = { (varExpr: VarExpr) in
       let possibleType = DataType(name: varExpr.name.name)
       if self.context.isValidType(possibleType) {
@@ -267,7 +267,7 @@ public class Sema: ASTTransformer, Pass {
     }
   }
 
-  public override func visitFuncArgumentAssignExpr(_ expr: FuncArgumentAssignExpr) -> Result {
+  public override func visitFuncArgumentAssignExpr(_ expr: FuncArgumentAssignExpr) {
     super.visitFuncArgumentAssignExpr(expr)
     guard context.isValidType(expr.type) else {
       error(

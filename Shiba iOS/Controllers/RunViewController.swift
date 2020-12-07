@@ -42,7 +42,6 @@ final class RunViewController: UIViewController {
 
   // MARK: Private
 
-
   @IBAction
   private func didTappedDoneButton(_ sender: Any) {
     dismiss(animated: true)

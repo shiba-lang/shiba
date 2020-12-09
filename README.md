@@ -1,6 +1,16 @@
 # Shiba
 Shiba is a compiled, simple, type-safe programming language. Written in Swift
 
+## Building and Using
+Open Xcode project and build the `Shiba` scheme.
+Then, symlink the shiba runtime and headers:
+
+```bash
+ln -s /path/to/Shiba_DerivedData/libshibaRuntime.a /usr/local/lib/libshibaRuntime.a
+mkdir /usr/local/include/shiba
+ln -s /path/to/Shiba/Sources/Runtime/*.h /usr/local/include/shiba/. 
+
+```
 ## TODO
 
 ### Main
@@ -10,7 +20,7 @@ Shiba is a compiled, simple, type-safe programming language. Written in Swift
 - [x] Sema
 - [ ] LLVM IR Gen
 - [x] Diagnostics
-- [ ] Runtime
+- [x] Runtime
 - [x] Driver
 
 ### Standard library
@@ -22,3 +32,7 @@ Shiba is a compiled, simple, type-safe programming language. Written in Swift
 - [ ] Example
 - [ ] Documents
 - [ ] Build
+
+### Editor support
+- [ ] VSCode theme
+- [ ] Vim theme

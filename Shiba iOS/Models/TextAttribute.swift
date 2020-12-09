@@ -12,25 +12,27 @@ import UIKit
 import AppKit
 #endif
 
+// I have no idea why this cannot compile when switch scheme
 
-// MARK: - TextAttributes
-
-struct TextAttributes {
-  let font: UIFont
-  let boldFont: UIFont
-  let keyword: UIColor
-  let literal: UIColor
-  let normal: UIColor
-  let comment: UIColor
-  let string: UIColor
-  let internalName: UIColor
-  let externalName: UIColor
-}
-
-// MARK: - Attribute
-
-struct Attribute {
-  let name: String
-  let value: Any
-  let range: NSRange
-}
+//
+//// MARK: - TextAttributes
+//
+//struct TextAttributes {
+//  let font: UIFont
+//  let boldFont: UIFont
+//  let keyword: UIColor
+//  let literal: UIColor
+//  let normal: UIColor
+//  let comment: UIColor
+//  let string: UIColor
+//  let internalName: UIColor
+//  let externalName: UIColor
+//}
+//
+//// MARK: - Attribute
+//
+//struct Attribute {
+//  let name: String
+//  let value: Any
+//  let range: NSRange
+//}

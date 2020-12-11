@@ -1,0 +1,3 @@
+[submodule "editor-support"]
+	path = editor-support
+	url = https://github.com/shiba-lang/vscode-syntax-highlight

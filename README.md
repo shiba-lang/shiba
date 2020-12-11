@@ -8,7 +8,7 @@ Then, symlink the shiba runtime and headers:
 ```bash
 ln -s /path/to/Shiba_DerivedData/libshibaRuntime.a /usr/local/lib/libshibaRuntime.a
 mkdir /usr/local/include/shiba
-ln -s /path/to/Shiba/Sources/Runtime/*.h /usr/local/include/shiba/. 
+ln -s /path/to/Shiba/Sources/Runtime/*.h /usr/local/include/shiba/.
 
 ```
 ## TODO
@@ -34,5 +34,5 @@ ln -s /path/to/Shiba/Sources/Runtime/*.h /usr/local/include/shiba/.
 - [ ] Build
 
 ### Editor support
-- [ ] VSCode theme
+- [x] VSCode theme
 - [ ] Vim theme

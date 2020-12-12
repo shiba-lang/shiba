@@ -1,0 +1,13 @@
+fn testIfElse() -> Bool {
+    return false
+}
+
+fn main() {
+    if true {
+        if testIfElse() {
+
+        } else {
+            printf("False????")
+        }
+    }
+}

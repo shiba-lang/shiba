@@ -1,0 +1,31 @@
+indirect type Foo {
+    mut bar: Int
+    fn setBar(_ bar: Int) {
+        self.bar = bar
+    }
+
+    deinit {
+        printf("Deinitializing %p\n", self)
+    }
+}
+
+type Bar {
+    mut baz: Int
+    mut foo: Foo
+    fn reset() {
+        self.foo.setBar(5)
+    }
+}
+
+fn fooSetBar(_ foo: Foo, _ bar: Int) {
+    foo.bar = bar
+}
+
+fn main() {
+    for mut i = 0; i < 100_000; i += 1 {
+        let foo = Foo(bar: 100)
+        if i % 1000 == 0 {
+            printf("allocated %d objects\n", i)
+        }
+    }
+}

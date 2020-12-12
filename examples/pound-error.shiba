@@ -1,0 +1,23 @@
+#error "Hey this is pound error"
+
+#warning "After that, I wrote some pound warning examples"
+
+type Foo {
+    #warning "Then, with Foo type it has pound warning too"
+    #error "Pound error also here"
+}
+
+fn foo() {
+    #warning "#fn foo() -> waring"
+    #error "#fn foo() -> error"
+}
+
+fn bar() {
+    if true {
+        #waring "fn bar -> warning"
+    }
+}
+
+fn main() {
+    #error "Something went wrong!!!"
+}

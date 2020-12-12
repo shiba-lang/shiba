@@ -1,0 +1,10 @@
+extension Bool {
+    fn toInt() -> Int {
+        return self ? 1 : 0
+    }
+}
+
+fn main() {
+    printf("false: %d\n", false.toInt())
+    printf("true: %d\n", true.toInt())
+}

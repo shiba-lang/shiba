@@ -1,0 +1,9 @@
+fn main() {
+    var y = 0;
+    for
+        for mut x = 1; x < 100; x += 1 {
+            printf("%d\n", x);
+        }; y < 10; y += 1 {
+            printf("%d\n", x);
+        }
+}

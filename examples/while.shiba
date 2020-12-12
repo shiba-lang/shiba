@@ -1,0 +1,26 @@
+fn fact(_ n: Int) -> Int {
+    if n === 0 { 
+        return 1; 
+    }
+
+    return n * fact(n - 1);
+}
+
+fn factWhile(_ n: Int) -> Int {
+    mut n = n 
+    mut accum = 1
+    while n > 0 {
+        accum *= n
+        n -= 1
+    }
+    return accum
+}
+
+fn println(_ val: Int) {
+    printf("%d\n", val);
+}
+
+fn main() {
+    println(fact(5));
+    println(factWhile(5));
+}

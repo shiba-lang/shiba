@@ -1,0 +1,13 @@
+foreign fn malloc(_: Int) -> *Int8
+
+fn compare(_ _a: *Int8, _ _b: *Int8) -> Int {
+    mut a = *(_a as *Int)
+    mut b = *(_b as *Int)
+    if a == b { 
+        return 0 
+    }
+    if a < b {
+        return - 1
+    }
+    return 1
+}

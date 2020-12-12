@@ -18,7 +18,7 @@ public struct Identifier:
 
   // MARK: Lifecycle
 
-  init(name: String, range: SourceRange? = nil) {
+  public init(name: String, range: SourceRange? = nil) {
     self.name = name
     self.range = range
   }
@@ -33,7 +33,7 @@ public struct Identifier:
     range = nil
   }
 
-  init(extendedGraphemeCluserLiteral name: ExtendedGraphemeClusterType) {
+  private init(extendedGraphemeCluserLiteral name: ExtendedGraphemeClusterType) {
     self.name = name
     range = nil
   }

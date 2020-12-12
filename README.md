@@ -34,5 +34,5 @@ ln -s /path/to/Shiba/Sources/Runtime/*.h /usr/local/include/shiba/.
 - [ ] Build
 
 ### Editor support
-- [x] VSCode theme
-- [ ] Vim theme
+- [x] VSCode
+- [ ] Vim

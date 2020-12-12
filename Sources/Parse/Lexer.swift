@@ -237,7 +237,7 @@ public struct Lexer {
     while advanceIf(f) != nil {}
   }
 
-  private mutating func collectWhile(_ f: (UnicodeScalar) -> Bool) -> String {
+  public mutating func collectWhile(_ f: (UnicodeScalar) -> Bool) -> String {
     var str = ""
     while let c = advanceIf(f) {
       str.append(String(c))

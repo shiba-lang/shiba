@@ -11,10 +11,7 @@ import Foundation
 
 public class StreamConsumer<StreamType: TextOutputStream>: DiagnosticConsumer {
 
-  var lines: [String]
-  var filename: String
-  var isColored: Bool
-  var stream: StreamType
+  // MARK: Lifecycle
 
   public init(
     filename: String,
@@ -28,6 +25,50 @@ public class StreamConsumer<StreamType: TextOutputStream>: DiagnosticConsumer {
     self.lines = lines
     self.stream = stream
   }
+
+  // MARK: Public
+
+  public func consume(_ diagnostic: Diagnostic) {
+    stream.write("\(filename):")
+    if let sourceLoc = diagnostic.sourceLocation {
+      with([.bold]) {
+        stream.write("\(sourceLoc.line):\(sourceLoc.column)")
+      }
+    }
+    stream.write(" ")
+    switch diagnostic.diagnosticType {
+    case .error:
+      with([.bold, .red]) {
+        stream.write("error: ")
+      }
+    case .warning:
+      with([.bold, .green]) {
+        stream.write("warning: ")
+      }
+    }
+    with([.bold]) {
+      stream.write("\(diagnostic.message)\n")
+    }
+    if let loc = diagnostic.sourceLocation, loc.line > 0 {
+      let line = lines[loc.line - 1]
+      stream.write(line + "\n")
+      with([.bold, .magenta]) {
+        stream.write(highlightString(forDiag: diagnostic))
+      }
+      stream.write("\n")
+    }
+
+  }
+
+
+  // MARK: Internal
+
+  var lines: [String]
+  var filename: String
+  var isColored: Bool
+  var stream: StreamType
+
+  // MARK: Private
 
   private func with(_ colors: [ANSIColor], block: () -> Void) {
     if isColored {
@@ -74,38 +115,5 @@ public class StreamConsumer<StreamType: TextOutputStream>: DiagnosticConsumer {
     }
     return String(chars)
   }
-
-  public func consume(_ diagnostic: Diagnostic) {
-    stream.write("\(filename):")
-    if let sourceLoc = diagnostic.sourceLocation {
-      with([.bold]) {
-        stream.write("\(sourceLoc.line):\(sourceLoc.column)")
-      }
-    }
-    stream.write(" ")
-    switch diagnostic.diagnosticType {
-    case .error:
-      with([.bold, .red]) {
-        stream.write("error: ")
-      }
-    case .warning:
-      with([.bold, .green]) {
-        stream.write("warning: ")
-      }
-    }
-    with([.bold]) {
-      stream.write("\(diagnostic.message)\n")
-    }
-    if let loc = diagnostic.sourceLocation, loc.line > 0 {
-      let line = lines[loc.line - 1]
-      stream.write(line + "\n")
-      with([.bold, .magenta]) {
-        stream.write(highlightString(forDiag: diagnostic))
-      }
-      stream.write("\n")
-    }
-
-  }
-
 
 }

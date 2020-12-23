@@ -60,6 +60,15 @@ public struct Lexer {
     return tokens
   }
 
+  public mutating func collectWhile(_ f: (UnicodeScalar) -> Bool) -> String {
+    var str = ""
+    while let c = advanceIf(f) {
+      str.append(String(c))
+
+    }
+    return str
+  }
+
   // MARK: Private
 
   private var currentChar: UnicodeScalar? {
@@ -235,15 +244,6 @@ public struct Lexer {
     completion: () -> Void = {}
   ) {
     while advanceIf(f) != nil {}
-  }
-
-  public mutating func collectWhile(_ f: (UnicodeScalar) -> Bool) -> String {
-    var str = ""
-    while let c = advanceIf(f) {
-      str.append(String(c))
-
-    }
-    return str
   }
 
   private mutating func readCharacter() throws -> UnicodeScalar {

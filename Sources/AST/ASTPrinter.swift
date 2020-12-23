@@ -8,8 +8,8 @@
 import Foundation
 
 public final class ASTPrinter<StreamType: TextOutputStream>: ASTTransformer {
-  var stream: StreamType
-  var indentLevel: Int = 0
+
+  // MARK: Lifecycle
 
   public init(stream: inout StreamType, context: ASTContext) {
     self.stream = stream
@@ -20,23 +20,7 @@ public final class ASTPrinter<StreamType: TextOutputStream>: ASTTransformer {
     fatalError("init(context:) has not been implemented")
   }
 
-  private func indent() {
-    indentLevel += 2
-  }
-
-  private func dedent() {
-    indentLevel -= 2
-  }
-
-  private func writeIndent() {
-    stream.write(String(repeating: " ", count: indentLevel))
-  }
-
-  func withIndent(_ f: () -> Void) {
-    indent()
-    f()
-    dedent()
-  }
+  // MARK: Public
 
   public override func run(in context: ASTContext) {
     var topLevel = [Expr]()
@@ -146,28 +130,6 @@ public final class ASTPrinter<StreamType: TextOutputStream>: ASTTransformer {
     }
   }
 
-  private func writeSignature(
-    args: [FuncArgumentAssignExpr],
-    ret: TypeRefExpr,
-    hasVarArgs: Bool
-  ) {
-    stream.write("(")
-    for (idx, arg) in args.enumerated() {
-      visitFuncArgumentAssignExpr(arg)
-      if idx != args.count - 1 || hasVarArgs {
-        stream.write(", ")
-      }
-    }
-    if hasVarArgs {
-      stream.write("_: ...")
-    }
-    stream.write(")")
-    if ret != .void {
-      stream.write(" -> ")
-      visit(ret)
-    }
-  }
-
   public override func visitClosureExpr(_ expr: ClosureExpr) {
     stream.write("{")
     writeSignature(args: expr.args, ret: expr.returnType, hasVarArgs: false)
@@ -241,24 +203,6 @@ public final class ASTPrinter<StreamType: TextOutputStream>: ASTTransformer {
 
   public override func visitCompoundExpr(_ expr: CompoundExpr) {
     visitCompoundExpr(expr, braced: true)
-  }
-
-  private func visitCompoundExpr(_ expr: CompoundExpr, braced: Bool) {
-    if braced {
-      stream.write("{")
-    }
-    stream.write("\n")
-    withIndent {
-      for e in expr.exprs {
-        writeIndent()
-        visit(e)
-        stream.write("\n")
-      }
-    }
-    if braced {
-      writeIndent()
-      stream.write("}")
-    }
   }
 
   public override func visitFuncCallExpr(_ expr: FuncCallExpr) {
@@ -414,4 +358,70 @@ public final class ASTPrinter<StreamType: TextOutputStream>: ASTTransformer {
     visit(expr.value)
     stream.write(")")
   }
+
+  // MARK: Internal
+
+  var stream: StreamType
+  var indentLevel: Int = 0
+
+  func withIndent(_ f: () -> Void) {
+    indent()
+    f()
+    dedent()
+  }
+
+  // MARK: Private
+
+  private func indent() {
+    indentLevel += 2
+  }
+
+  private func dedent() {
+    indentLevel -= 2
+  }
+
+  private func writeIndent() {
+    stream.write(String(repeating: " ", count: indentLevel))
+  }
+
+  private func writeSignature(
+    args: [FuncArgumentAssignExpr],
+    ret: TypeRefExpr,
+    hasVarArgs: Bool
+  ) {
+    stream.write("(")
+    for (idx, arg) in args.enumerated() {
+      visitFuncArgumentAssignExpr(arg)
+      if idx != args.count - 1 || hasVarArgs {
+        stream.write(", ")
+      }
+    }
+    if hasVarArgs {
+      stream.write("_: ...")
+    }
+    stream.write(")")
+    if ret != .void {
+      stream.write(" -> ")
+      visit(ret)
+    }
+  }
+
+  private func visitCompoundExpr(_ expr: CompoundExpr, braced: Bool) {
+    if braced {
+      stream.write("{")
+    }
+    stream.write("\n")
+    withIndent {
+      for e in expr.exprs {
+        writeIndent()
+        visit(e)
+        stream.write("\n")
+      }
+    }
+    if braced {
+      writeIndent()
+      stream.write("}")
+    }
+  }
+
 }

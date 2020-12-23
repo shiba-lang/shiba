@@ -70,6 +70,8 @@ enum Mode: Int {
   case emitAST
   case prettyPrint
 
+  // MARK: Lifecycle
+
   init(_ raw: RawMode) {
     switch raw {
     case EmitAST:
@@ -85,10 +87,8 @@ enum Mode: Int {
 // MARK: - Options
 
 struct Options {
-  let filename: String
-  let mode: Mode
-  let remainder: [String]
-  let importC: Bool
+
+  // MARK: Lifecycle
 
   init(_ raw: RawOptions) {
     filename = String(cString: raw.filename!)
@@ -101,6 +101,14 @@ struct Options {
     importC = raw.importC
     DestroyRawOptions(raw)
   }
+
+  // MARK: Internal
+
+  let filename: String
+  let mode: Mode
+  let remainder: [String]
+  let importC: Bool
+
 }
 
 func main() -> Int32 {

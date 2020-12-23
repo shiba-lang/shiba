@@ -1,9 +1,15 @@
+--swiftversion 5.3
+
 # indent
 --indent 2
 --ifdef no-indent
 
 --self remove # redundantSelf
 --importgrouping testable-bottom # sortedImports
+
+# numberFormatting
+--decimalgrouping 3
+--hexgrouping "ignore"
 
 # wrap
 --maxwidth 80
@@ -23,14 +29,10 @@
 --funcattributes prev-line # wrapAttributes
 
 --organizetypes class,struct,enum,extension # organizeDeclarations
---extensionacl on-declarations # extensionAccessControl
 
 # elseOnSameLine
 --guardelse same-line
 
 # rules
---rules anyObjectProtocol,redundantParens,redundantReturn,redundantSelf,sortedImports,strongifiedSelf,trailingCommas,trailingSpace,wrapArguments,wrapMultilineStatementBraces,indent,wrapAttributes,markTypes,extensionAccessControl
+--rules anyObjectProtocol,redundantParens,redundantReturn,redundantSelf,sortedImports,strongifiedSelf,trailingCommas,trailingSpace,wrapArguments,wrapMultilineStatementBraces,indent,wrapAttributes,markTypes
 
-#exclude
-
---swiftversion 5.3

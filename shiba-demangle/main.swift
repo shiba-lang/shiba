@@ -32,9 +32,14 @@ func demangleArgs() {
 // MARK: - DemangleRegex
 
 class DemangleRegex: NSRegularExpression {
+
+  // MARK: Lifecycle
+
   convenience init() {
     try! self.init(pattern: "_W\\w+", options: [])
   }
+
+  // MARK: Internal
 
   override func replacementString(
     for result: NSTextCheckingResult,

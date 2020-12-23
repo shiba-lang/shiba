@@ -9,6 +9,8 @@ import Foundation
 
 // MARK: - Diagnostic
 
+/// Represents a diagnostic that expresses a failure or warning condition found
+/// during compilation.
 public struct Diagnostic: Error, CustomStringConvertible {
 
   // MARK: Public
@@ -24,7 +26,16 @@ public struct Diagnostic: Error, CustomStringConvertible {
   // MARK: Internal
 
   enum DiagnosticType: CustomStringConvertible {
-    case warning, error
+    /// The message is a warning that will not prevent compilation but that
+    /// the shiba compiler feels might signal code that does not behave the way
+    /// the programmer expected.
+    case warning
+
+    /// The message is an error that violates a rule for the shiba language.
+    /// This error might not necessarily prevent further processing of the
+    /// source file after it is emitted, but will ultimatelly prevent shiba from
+    /// producing an executable
+    case error
 
     // MARK: Internal
 
@@ -33,8 +44,13 @@ public struct Diagnostic: Error, CustomStringConvertible {
     }
   }
 
+  /// The textual message that the diagnostic intends to print.
   let message: String
+
+  /// The type can be diag with.
   let diagnosticType: DiagnosticType
+
+  /// The location this diagnostic is associated with.
   let sourceLocation: SourceLocation?
 
   private(set) var highlights: [SourceRange]
@@ -65,6 +81,7 @@ public struct Diagnostic: Error, CustomStringConvertible {
     )
   }
 
+  /// Adds a highlighted to this.
   func highlighting(_ range: SourceRange?) -> Diagnostic {
     guard let range = range else { return self }
     var c = self
@@ -83,10 +100,30 @@ public struct Diagnostic: Error, CustomStringConvertible {
 
 // MARK: - DiagnosticEngine
 
-public class DiagnosticEngine {
+/// A DiagnosticEngine is a container for diagnostics that have been emitted
+/// while compiling a shiba program. It exposes an interface for emitting errors
+/// and warnings and allows for iteration over diagnostics after the fact.
+public final class DiagnosticEngine {
+
+  /// The current set of emitted warnings.
+  private(set) var warnings = [Diagnostic]()
+
+  /// The current set of emitted errors.
+  private(set) var errors = [Diagnostic]()
+
+  /// The set of consumers receiving diagnostics notifications from this engine.
+  private(set) var consumers = [DiagnosticConsumer]()
+
+  /// Determines if the engine has any `.error` diagnostics registered.
+  var hasErrors: Bool {
+    !errors.isEmpty
+  }
 
   // MARK: Public
 
+  /// Adds a diagnostic consumer to the engine to receive diagnostic updates
+  ///
+  /// - Parameter consumer: The consumer that will observe diagnostics
   public func register(_ consumer: DiagnosticConsumer) {
     consumers.append(consumer)
   }
@@ -119,14 +156,6 @@ public class DiagnosticEngine {
   }
 
   // MARK: Internal
-
-  private(set) var warnings = [Diagnostic]()
-  private(set) var errors = [Diagnostic]()
-  private(set) var consumers = [DiagnosticConsumer]()
-
-  var hasErrors: Bool {
-    !errors.isEmpty
-  }
 
   func error(
     _ err: Error,

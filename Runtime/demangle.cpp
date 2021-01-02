@@ -254,8 +254,7 @@ bool demangle(std::string &symbol, std::string &out) {
   case 'C':
     return demangleClosure(symbol, out);
   case 'F':
-    //			return
-    break;
+		return demangleFunction(symbol, out);
   case 'T':
     return demangleType(symbol, out);
   }
